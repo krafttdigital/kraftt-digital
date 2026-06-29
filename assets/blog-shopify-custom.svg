@@ -1,0 +1,33 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="760" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F6F1EA"/>
+      <stop offset="0.55" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#DED6CA"/>
+    </linearGradient>
+    <filter id="shadow" x="-40" y="-40" width="1280" height="840" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="28" stdDeviation="30" flood-color="#090A0B" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="760" fill="url(#bg)"/>
+  <g filter="url(#shadow)">
+    <rect x="124" y="110" width="440" height="540" rx="30" fill="#090A0B"/>
+    <rect x="176" y="170" width="336" height="154" rx="18" fill="#F4EFE7" fill-opacity="0.09" stroke="#F4EFE7" stroke-opacity="0.13"/>
+    <rect x="214" y="210" width="92" height="74" rx="12" fill="#42E8C4" fill-opacity="0.22"/>
+    <path d="M334 222H460" stroke="#F4EFE7" stroke-opacity="0.22" stroke-width="12" stroke-linecap="round"/>
+    <path d="M334 270H426" stroke="#F4EFE7" stroke-opacity="0.13" stroke-width="12" stroke-linecap="round"/>
+    <rect x="176" y="370" width="336" height="190" rx="18" fill="#F4EFE7" fill-opacity="0.07" stroke="#F4EFE7" stroke-opacity="0.13"/>
+    <path d="M218 434H470" stroke="#D1B487" stroke-opacity="0.48" stroke-width="14" stroke-linecap="round"/>
+    <path d="M218 492H418" stroke="#F4EFE7" stroke-opacity="0.16" stroke-width="12" stroke-linecap="round"/>
+    <rect x="636" y="110" width="440" height="540" rx="30" fill="#090A0B"/>
+    <rect x="688" y="170" width="336" height="154" rx="18" fill="#F4EFE7" fill-opacity="0.09" stroke="#F4EFE7" stroke-opacity="0.13"/>
+    <path d="M730 228H982" stroke="#69D8FF" stroke-opacity="0.4" stroke-width="14" stroke-linecap="round"/>
+    <path d="M730 278H922" stroke="#F4EFE7" stroke-opacity="0.16" stroke-width="12" stroke-linecap="round"/>
+    <rect x="688" y="370" width="336" height="190" rx="18" fill="#F4EFE7" fill-opacity="0.07" stroke="#F4EFE7" stroke-opacity="0.13"/>
+    <path d="M730 426H982" stroke="#D1B487" stroke-opacity="0.48" stroke-width="14" stroke-linecap="round"/>
+    <rect x="730" y="478" width="88" height="54" rx="10" fill="#69D8FF" fill-opacity="0.18"/>
+    <rect x="846" y="478" width="88" height="54" rx="10" fill="#42E8C4" fill-opacity="0.15"/>
+  </g>
+  <text x="238" y="624" fill="#D1B487" font-family="Arial, sans-serif" font-size="34" font-weight="700">Shopify</text>
+  <text x="746" y="624" fill="#D1B487" font-family="Arial, sans-serif" font-size="34" font-weight="700">Custom</text>
+</svg>
