@@ -2,6 +2,16 @@
   command = "npm run build"
   publish = "dist"
 
+[[headers]]
+  for = "/admin"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
+[[headers]]
+  for = "/404"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+
 # Static, real files are served as-is; every other route falls through to
 # index.html so React Router can render the matching page client-side.
 [[redirects]]

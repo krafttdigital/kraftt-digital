@@ -7,6 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0D0D0D" />
 
+    <!-- Google Tag Manager -->
+    <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-T44Z78PQ');
+    </script>
+    <!-- End Google Tag Manager -->
+
     <!-- Favicons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
@@ -15,6 +25,7 @@
     <!-- Preconnect for Font Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
 
     <!-- Kraftt Digital Brand Fonts -->
     <link
@@ -71,15 +82,17 @@
 
     <meta
       property="og:image"
-      content="https://krafttdigital.in/assets/Profile%20Image.png"
+      content="https://krafttdigital.in/og-image.png"
     />
 
     <meta
       property="og:image:secure_url"
-      content="https://krafttdigital.in/assets/Profile%20Image.png"
+      content="https://krafttdigital.in/og-image.png"
     />
 
-    <meta property="og:image:alt" content="Kraftt Digital logo and profile image" />
+    <meta property="og:image:alt" content="Kraftt Digital brand preview" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:locale" content="en_IN" />
 
     <!-- Twitter / X Preview -->
@@ -98,10 +111,10 @@
 
     <meta
       name="twitter:image"
-      content="https://krafttdigital.in/assets/Profile%20Image.png"
+      content="https://krafttdigital.in/og-image.png"
     />
 
-    <meta name="twitter:image:alt" content="Kraftt Digital logo and profile image" />
+    <meta name="twitter:image:alt" content="Kraftt Digital brand preview" />
 
     <!-- Structured Data: Organization + Professional Service -->
     <script type="application/ld+json">
@@ -110,10 +123,12 @@
         "@type": ["Organization", "ProfessionalService"],
         "name": "Kraftt Digital",
         "url": "https://krafttdigital.in/",
-        "logo": "https://krafttdigital.in/assets/Profile%20Image.png",
-        "image": "https://krafttdigital.in/assets/Profile%20Image.png",
+        "logo": "https://krafttdigital.in/favicon.svg",
+        "image": "https://krafttdigital.in/og-image.png",
         "description": "Kraftt Digital is a premium digital agency building websites, Shopify stores, SEO systems, brand identities, AI content, social media systems and custom dashboards for serious businesses.",
         "slogan": "Strategy. Design. Growth.",
+        "email": "krafttdigital@gmail.com",
+        "telephone": "+917986769102",
         "brand": {
           "@type": "Brand",
           "name": "Kraftt Digital"
@@ -154,8 +169,8 @@
           "Dashboard and Internal Tool Development"
         ],
         "sameAs": [
-          "https://www.instagram.com/krafttdigital",
-          "https://www.linkedin.com/company/krafttdigital"
+          "https://www.instagram.com/krafttdigital/",
+          "https://www.linkedin.com/company/krafttdigital/"
         ]
       }
     </script>
@@ -173,7 +188,7 @@
           "name": "Kraftt Digital",
           "logo": {
             "@type": "ImageObject",
-            "url": "https://krafttdigital.in/assets/Profile%20Image.png"
+            "url": "https://krafttdigital.in/favicon.svg"
           }
         }
       }
@@ -181,6 +196,12 @@
   </head>
 
   <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-T44Z78PQ" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

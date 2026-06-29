@@ -30,6 +30,10 @@ function setLink(rel: string, href: string) {
   tag.setAttribute('href', href);
 }
 
+function resolveAbsoluteUrl(url: string) {
+  return new URL(url, siteConfig.domain).toString();
+}
+
 /**
  * Sets document title, meta description, canonical URL, Open Graph and
  * Twitter card tags for the current route.
@@ -45,12 +49,15 @@ function setLink(rel: string, href: string) {
 export function SEO({ title, description, path, type = 'website', noIndex = false, image }: SEOProps) {
   useEffect(() => {
     const fullTitle = path === '/' ? title : `${title} | ${siteConfig.name}`;
+    const robots = noIndex ? 'noindex, nofollow, noarchive' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
+    const canonicalUrl = resolveAbsoluteUrl(path);
+    const socialImage = resolveAbsoluteUrl(image ?? siteConfig.assets.socialImage);
+
     document.title = fullTitle;
 
+    setMeta('title', fullTitle);
     setMeta('description', description);
-    setMeta('robots', noIndex ? 'noindex, nofollow' : 'index, follow');
-
-    const canonicalUrl = `${siteConfig.domain}${path}`;
+    setMeta('robots', robots);
     setLink('canonical', canonicalUrl);
 
     setMeta('og:title', fullTitle, 'property');
@@ -58,11 +65,17 @@ export function SEO({ title, description, path, type = 'website', noIndex = fals
     setMeta('og:type', type, 'property');
     setMeta('og:url', canonicalUrl, 'property');
     setMeta('og:site_name', siteConfig.name, 'property');
-    if (image) setMeta('og:image', image, 'property');
+    setMeta('og:image', socialImage, 'property');
+    setMeta('og:image:secure_url', socialImage, 'property');
+    setMeta('og:image:alt', `${siteConfig.name} brand preview`, 'property');
+    setMeta('og:image:width', '1200', 'property');
+    setMeta('og:image:height', '630', 'property');
 
-    setMeta('twitter:card', image ? 'summary_large_image' : 'summary');
+    setMeta('twitter:card', 'summary_large_image');
     setMeta('twitter:title', fullTitle);
     setMeta('twitter:description', description);
+    setMeta('twitter:image', socialImage);
+    setMeta('twitter:image:alt', `${siteConfig.name} brand preview`);
   }, [title, description, path, type, noIndex, image]);
 
   return null;

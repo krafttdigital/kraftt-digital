@@ -165,10 +165,11 @@ To override it for staging or a future serverless/API endpoint, set `VITE_CONTAC
 ## 10. SEO maintenance
 
 - `npm run generate:sitemap` regenerates `public/sitemap.xml` from the actual route data (services, blog posts, tools, portfolio projects, legal pages) — it runs automatically as part of `npm run build`, so the sitemap can never silently go stale relative to the data files.
-- `public/robots.txt` references the sitemap and blocks only the internal `/404` path.
+- `public/robots.txt` references the sitemap and blocks the internal `/admin` and `/404` paths. Netlify also sends `X-Robots-Tag: noindex, nofollow, noarchive` for those routes.
 - JSON-LD builders live in `src/components/seo/schemaBuilders.ts` (`Organization`, `WebSite`, `BreadcrumbList`, `Service`, `FAQPage`, `BlogPosting`, `WebApplication`) and are only ever rendered alongside the matching visible content — no schema is added for content that isn't on the page.
 - The live production domain is set in `siteConfig.domain` (`https://krafttdigital.in`). The sitemap, canonical URLs, and JSON-LD all read from this single value.
-- Google Analytics 4 is configured with measurement ID `G-5MLNQBXJY3` in `siteConfig.analytics.gaMeasurementId`. `src/components/analytics/GoogleAnalytics.tsx` loads `gtag.js`, tracks SPA route changes, and sends a `generate_lead` event when the contact form is submitted successfully. Use `VITE_GA_MEASUREMENT_ID` only when you need to override the default property.
+- Google Tag Manager container `GTM-T44Z78PQ` is installed in `index.html` with the required `<head>` script and `<body>` noscript iframe.
+- Google Analytics 4 is configured for the `Kraftt Digital` web data stream (`15164387564`, `https://krafttdigital.in`) with measurement ID `G-5MLNQBXJY3` in `siteConfig.analytics`. `src/components/analytics/GoogleAnalytics.tsx` loads `gtag.js`, tracks SPA route changes, and sends a `generate_lead` event when the contact form is submitted successfully. Do not also paste the static GA snippet into `index.html`, or page views can be counted twice. If you add the same GA4 tag inside GTM, disable the direct React GA4 tracker first. Use `VITE_GA_MEASUREMENT_ID` only when you need to override the default property.
 
 ## 11. Content Required (placeholders to fill before launch)
 

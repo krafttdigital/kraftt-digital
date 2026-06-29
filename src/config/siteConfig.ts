@@ -24,6 +24,10 @@ export const siteConfig = {
     monogram: 'K.',
   },
 
+  assets: {
+    socialImage: '/og-image.png',
+  },
+
   contact: {
     email: 'krafttdigital@gmail.com',
     formEndpoint: 'https://formspree.io/f/mzdlrzrq',
@@ -62,6 +66,10 @@ export const siteConfig = {
 
   // Analytics / verification.
   analytics: {
+    gtmContainerId: 'GTM-T44Z78PQ',
+    gaStreamName: 'Kraftt Digital',
+    gaStreamUrl: 'https://krafttdigital.in',
+    gaStreamId: '15164387564',
     gaMeasurementId: 'G-5MLNQBXJY3',
     searchConsoleVerification: '', // CONTENT REQUIRED
   },

@@ -55,4 +55,15 @@ ${entries
 `;
 
 writeFileSync(resolve(__dirname, '../public/sitemap.xml'), xml, 'utf-8');
+writeFileSync(
+  resolve(__dirname, '../public/robots.txt'),
+  `User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /404
+
+Sitemap: ${siteConfig.domain}/sitemap.xml
+`,
+  'utf-8',
+);
 console.log(`✓ Generated public/sitemap.xml with ${entries.length} URLs.`);
