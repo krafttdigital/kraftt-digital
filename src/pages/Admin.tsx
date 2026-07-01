@@ -263,6 +263,284 @@ function qrUrl(data: string) {
   return `https://api.qrserver.com/v1/create-qr-code/?size=180x180&margin=12&data=${encodeURIComponent(data)}`;
 }
 
+
+const adminPrintStyles = `
+  .kd-admin-document {
+    aspect-ratio: 210 / 297;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  @media print {
+    html,
+    body,
+    #root {
+      width: 210mm !important;
+      min-width: 210mm !important;
+      height: 297mm !important;
+      min-height: 297mm !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      background: #F2EFE9 !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    body * {
+      visibility: hidden !important;
+    }
+
+    .admin-no-print,
+    .admin-no-print * {
+      display: none !important;
+      visibility: hidden !important;
+    }
+
+    .kd-admin-document,
+    .kd-admin-document * {
+      visibility: visible !important;
+    }
+
+    .kd-admin-document {
+      position: fixed !important;
+      inset: 0 auto auto 0 !important;
+      width: 210mm !important;
+      height: 297mm !important;
+      max-width: none !important;
+      margin: 0 !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      overflow: hidden !important;
+      transform: none !important;
+      break-before: avoid !important;
+      break-after: avoid !important;
+      page-break-before: avoid !important;
+      page-break-after: avoid !important;
+      background: #F2EFE9 !important;
+    }
+
+    .kd-admin-document header {
+      min-height: 145px !important;
+    }
+
+    .kd-admin-document header > div {
+      padding: 18px 22px !important;
+    }
+
+    .kd-admin-document h2 {
+      font-size: 58px !important;
+      line-height: 0.84 !important;
+      letter-spacing: -0.055em !important;
+    }
+
+    .kd-admin-document p,
+    .kd-admin-document li,
+    .kd-admin-document td,
+    .kd-admin-document th,
+    .kd-admin-document div {
+      line-height: 1.28 !important;
+    }
+
+    .kd-doc-section {
+      grid-template-columns: 0.78fr 1.22fr !important;
+    }
+
+    .kd-doc-section-label {
+      padding: 10px 14px !important;
+      font-size: 10px !important;
+      line-height: 1.1 !important;
+    }
+
+    .kd-doc-section-body {
+      padding: 10px 14px !important;
+      font-size: 10px !important;
+      line-height: 1.28 !important;
+    }
+
+    .kd-doc-info {
+      min-height: 72px !important;
+      padding: 12px 14px !important;
+    }
+
+    .kd-doc-info-title {
+      font-size: 9px !important;
+    }
+
+    .kd-doc-info-lines {
+      margin-top: 7px !important;
+      font-size: 10px !important;
+      line-height: 1.25 !important;
+    }
+
+    .kd-doc-intro {
+      padding: 12px 18px !important;
+    }
+
+    .kd-doc-intro p {
+      font-size: 10px !important;
+      line-height: 1.32 !important;
+    }
+
+    .kd-doc-signature {
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+
+    .kd-doc-signature > div {
+      padding: 12px 16px !important;
+    }
+
+    .kd-doc-signature-line {
+      margin-top: 26px !important;
+      padding-top: 5px !important;
+      font-size: 9px !important;
+    }
+
+    .kd-doc-signature-image-wrap {
+      height: 38px !important;
+      margin-top: 8px !important;
+    }
+
+    .kd-doc-signature-image {
+      height: 34px !important;
+    }
+
+    .kd-doc-footer {
+      height: 18px !important;
+    }
+
+    .kd-doc-logo-block {
+      min-height: 72px !important;
+      padding: 12px 14px !important;
+    }
+
+    .kd-doc-brand-name {
+      font-size: 22px !important;
+    }
+
+    .kd-doc-brand-subtitle {
+      font-size: 7px !important;
+      letter-spacing: 0.34em !important;
+    }
+
+    .kd-doc-bullets {
+      gap: 2px !important;
+    }
+
+    .kd-doc-bullets li {
+      font-size: 10px !important;
+      line-height: 1.25 !important;
+    }
+
+    .kd-doc-welcome-cta {
+      min-height: 82px !important;
+      padding: 18px !important;
+      font-size: 13px !important;
+    }
+
+    .kd-doc-invoice-table,
+    .kd-doc-invoice-table th,
+    .kd-doc-invoice-table td {
+      font-size: 10px !important;
+    }
+
+    .kd-doc-invoice-table th {
+      padding: 9px 14px !important;
+    }
+
+    .kd-doc-invoice-table td {
+      padding: 12px 14px !important;
+    }
+
+    .kd-doc-invoice-summary {
+      grid-template-columns: 1fr 240px !important;
+    }
+
+    .kd-doc-invoice-summary > div {
+      padding: 12px 14px !important;
+    }
+
+    .kd-doc-invoice-heading {
+      font-size: 16px !important;
+    }
+
+    .kd-doc-payment-details {
+      margin-top: 8px !important;
+      font-size: 10px !important;
+      line-height: 1.28 !important;
+    }
+
+    .kd-doc-total-row {
+      font-size: 10px !important;
+    }
+
+    .kd-doc-total-row > div {
+      padding: 8px 10px !important;
+    }
+
+    .kd-doc-qr {
+      width: 92px !important;
+      height: 92px !important;
+      margin-top: 10px !important;
+      padding: 5px !important;
+    }
+
+    .kd-doc-invoice-agreement > div {
+      padding: 12px 14px !important;
+    }
+
+    .kd-doc-invoice-agreement h3 {
+      font-size: 28px !important;
+    }
+
+    .kd-doc-metric-title {
+      padding: 12px 14px 0 !important;
+      font-size: 10px !important;
+    }
+
+    .kd-doc-metric-grid {
+      margin-top: 8px !important;
+    }
+
+    .kd-doc-metric-item {
+      min-height: 66px !important;
+      padding: 12px 8px !important;
+    }
+
+    .kd-doc-metric-label {
+      font-size: 8px !important;
+    }
+
+    .kd-doc-metric-value {
+      margin-top: 9px !important;
+      font-size: 20px !important;
+    }
+
+    .kd-admin-document[data-doc='fulfillment'] .kd-doc-section-label,
+    .kd-admin-document[data-doc='fulfillment'] .kd-doc-section-body,
+    .kd-admin-document[data-doc='guide'] .kd-doc-section-label,
+    .kd-admin-document[data-doc='guide'] .kd-doc-section-body {
+      padding-top: 8px !important;
+      padding-bottom: 8px !important;
+    }
+
+    .kd-admin-document[data-doc='fulfillment'] .kd-doc-bullets li,
+    .kd-admin-document[data-doc='guide'] .kd-doc-bullets li {
+      font-size: 9px !important;
+      line-height: 1.18 !important;
+    }
+
+    .kd-admin-document[data-doc='agreement'] .kd-doc-section-body,
+    .kd-admin-document[data-doc='welcome'] .kd-doc-section-body {
+      font-size: 10px !important;
+    }
+  }
+`;
+
 export default function Admin() {
   const [client, setClient] = useState<AdminClientData>(getStoredData);
   const [activeDoc, setActiveDoc] = useState<AdminDocumentId>('agreement');
@@ -356,6 +634,7 @@ export default function Admin() {
   return (
     <>
       <SEO title="Admin Document Builder" description="Internal Kraftt Digital document builder for client documents." path="/admin" noIndex />
+      <style>{adminPrintStyles}</style>
       <section className="relative overflow-hidden bg-[#050607] pt-[112px] pb-16 text-[var(--color-linen)]">
         <div className="pointer-events-none absolute inset-0 kd-hero-grid opacity-10" aria-hidden="true" />
         <div className="container-kd relative z-10">
@@ -508,7 +787,7 @@ export default function Admin() {
                 </div>
               </div>
 
-              <DocumentPage>
+              <DocumentPage docId={activeDoc}>
                 {activeDoc === 'agreement' && <AgreementDocument client={client} />}
                 {activeDoc === 'invoice' && <InvoiceDocument client={client} subtotal={subtotal} tax={tax} total={total} />}
                 {activeDoc === 'welcome' && <WelcomeDocument client={client} />}
@@ -584,9 +863,9 @@ function AdminTextarea({ label, value, onChange, rows }: { label: string; value:
   );
 }
 
-function DocumentPage({ children }: { children: ReactNode }) {
+function DocumentPage({ children, docId }: { children: ReactNode; docId: AdminDocumentId }) {
   return (
-    <article className="kd-admin-document mx-auto w-full max-w-[900px] overflow-hidden border border-black/10 bg-[#F2EFE9] text-black shadow-[0_28px_90px_rgba(0,0,0,0.38)]">
+    <article data-doc={docId} className="kd-admin-document mx-auto w-full max-w-[900px] overflow-hidden border border-black/10 bg-[#F2EFE9] text-black shadow-[0_28px_90px_rgba(0,0,0,0.38)]">
       {children}
     </article>
   );
@@ -595,10 +874,10 @@ function DocumentPage({ children }: { children: ReactNode }) {
 function BrandMark({ compact = false }: { compact?: boolean }) {
   return (
     <div className={compact ? 'text-right' : ''}>
-      <p className="font-display text-[28px] leading-none tracking-normal text-[#151515]" style={{ fontWeight: 300 }}>
+      <p className="kd-doc-brand-name font-display text-[28px] leading-none tracking-normal text-[#151515]" style={{ fontWeight: 300 }}>
         Kraftt<span className="text-[var(--color-umber)]">.</span>
       </p>
-      <p className="mt-1 font-sans text-[9px] uppercase tracking-[0.42em] text-[#8B6D4A]">Digital</p>
+      <p className="kd-doc-brand-subtitle mt-1 font-sans text-[9px] uppercase tracking-[0.42em] text-[#8B6D4A]">Digital</p>
     </div>
   );
 }
@@ -619,9 +898,9 @@ function DocHeader({ title, aside }: { title: string; aside?: ReactNode }) {
 
 function SplitSection({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <section className="grid grid-cols-[0.9fr_1.1fr] border-b border-black/16">
-      <div className="border-r border-black/10 p-5 font-sans text-[13px] font-black uppercase tracking-[-0.02em] text-black">{label}</div>
-      <div className="p-5 font-sans text-[12px] leading-relaxed text-black/72">{children}</div>
+    <section className="kd-doc-section grid grid-cols-[0.9fr_1.1fr] border-b border-black/16">
+      <div className="kd-doc-section-label border-r border-black/10 p-5 font-sans text-[13px] font-black uppercase tracking-[-0.02em] text-black">{label}</div>
+      <div className="kd-doc-section-body p-5 font-sans text-[12px] leading-relaxed text-black/72">{children}</div>
     </section>
   );
 }
@@ -639,7 +918,7 @@ function AgreementDocument({ client }: { client: AdminClientData }) {
           </>
         }
       />
-      <div className="border-b border-black/20 p-5 md:p-8">
+      <div className="kd-doc-intro border-b border-black/20 p-5 md:p-8">
         <p className="max-w-4xl font-sans text-[12px] leading-relaxed text-black/70">
           This agreement records that {client.clientName} of {client.companyName} accepts the working terms, payment obligations and project responsibilities for {client.projectName}. The client confirms they are ready to work with {siteConfig.name}, will provide accurate information, will not misrepresent project details, and will clear all agreed payments on time.
         </p>
@@ -687,7 +966,7 @@ function InvoiceDocument({ client, subtotal, tax, total }: { client: AdminClient
         <InfoBlock title="From" lines={[siteConfig.name, siteConfig.contact.email, `+91 ${siteConfig.contact.phone}`]} />
         <InfoBlock title="To" lines={[client.clientName, client.companyName, client.address, client.clientEmail]} />
       </div>
-      <table className="w-full border-collapse font-sans text-[12px]">
+      <table className="kd-doc-invoice-table w-full border-collapse font-sans text-[12px]">
         <thead>
           <tr className="bg-black text-[#F2EFE9]">
             <th className="px-5 py-3 text-left uppercase tracking-[0.1em]">Service name</th>
@@ -703,19 +982,19 @@ function InvoiceDocument({ client, subtotal, tax, total }: { client: AdminClient
           </tr>
         </tbody>
       </table>
-      <div className="grid grid-cols-[1fr_320px] border-b border-black/20">
+      <div className="kd-doc-invoice-summary grid grid-cols-[1fr_320px] border-b border-black/20">
         <div className="p-5">
-          <p className="font-sans text-[22px] font-black uppercase tracking-[-0.04em]">Payment will be accepted with:</p>
-          <p className="mt-4 whitespace-pre-line font-sans text-[12px] leading-relaxed text-black/70">{client.paymentDetails}</p>
+          <p className="kd-doc-invoice-heading font-sans text-[22px] font-black uppercase tracking-[-0.04em]">Payment will be accepted with:</p>
+          <p className="kd-doc-payment-details mt-4 whitespace-pre-line font-sans text-[12px] leading-relaxed text-black/70">{client.paymentDetails}</p>
         </div>
         <div className="border-l border-black/10 p-5">
           <TotalRow label={client.taxMode === 'inclusive' ? 'Base value' : 'Sub total'} value={formatMoney(subtotal, client.currency)} dark />
           <TotalRow label={client.taxMode === 'inclusive' ? `Tax included (${client.taxRate || 0}%)` : `Tax (${client.taxRate || 0}%)`} value={formatMoney(tax, client.currency)} />
           <TotalRow label="Total" value={formatMoney(total, client.currency)} dark />
-          <img src={qrUrl(client.paymentQrText)} alt="Payment QR code" className="mt-5 h-36 w-36 border border-black/20 bg-white p-2" />
+          <img src={qrUrl(client.paymentQrText)} alt="Payment QR code" className="kd-doc-qr mt-5 h-36 w-36 border border-black/20 bg-white p-2" />
         </div>
       </div>
-      <section className="grid grid-cols-[0.9fr_1.1fr]">
+      <section className="kd-doc-invoice-agreement grid grid-cols-[0.9fr_1.1fr]">
         <div className="p-5">
           <h3 className="font-sans text-[40px] font-black uppercase leading-none tracking-[-0.05em]">Agreement</h3>
         </div>
@@ -759,7 +1038,7 @@ function WelcomeDocument({ client }: { client: AdminClientData }) {
       <SplitSection label="Communication">
         Primary communication: {client.communicationChannel}. For urgent questions, contact {siteConfig.contact.email} or +91 {siteConfig.contact.phone}.
       </SplitSection>
-      <div className="flex min-h-[180px] items-center justify-center p-8 text-center font-sans text-[18px] font-black uppercase tracking-[-0.02em]">Let's build something great.</div>
+      <div className="kd-doc-welcome-cta flex min-h-[180px] items-center justify-center p-8 text-center font-sans text-[18px] font-black uppercase tracking-[-0.02em]">Let's build something great.</div>
       <BlackFooter />
     </>
   );
@@ -806,7 +1085,7 @@ function FulfillmentDocument({ client, profiles }: { client: AdminClientData; gu
   return (
     <>
       <DocHeader title="Fulfillment" aside="Final deliverables, handover and completion record." />
-      <div className="border-b border-black/20 p-5 md:p-8">
+      <div className="kd-doc-intro border-b border-black/20 p-5 md:p-8">
         <p className="font-sans text-[12px] leading-relaxed text-black/70">
           This document records the deliverables prepared for {client.companyName} under {client.projectName}. It can be shared at completion or used as an internal handover checklist.
         </p>
@@ -852,9 +1131,9 @@ function MonthlyReportDocument({ client }: { client: AdminClientData }) {
 
 function InfoBlock({ title, lines }: { title: string; lines: string[] }) {
   return (
-    <div className="min-h-[120px] border-r border-black/10 p-5 last:border-r-0">
-      <p className="font-sans text-[11px] font-black uppercase tracking-[0.1em] text-black">{title}</p>
-      <div className="mt-4 space-y-1 font-sans text-[12px] leading-relaxed text-black/70">
+    <div className="kd-doc-info min-h-[120px] border-r border-black/10 p-5 last:border-r-0">
+      <p className="kd-doc-info-title font-sans text-[11px] font-black uppercase tracking-[0.1em] text-black">{title}</p>
+      <div className="kd-doc-info-lines mt-4 space-y-1 font-sans text-[12px] leading-relaxed text-black/70">
         {lines.filter(Boolean).map((line) => (
           <p key={line}>{line}</p>
         ))}
@@ -865,7 +1144,7 @@ function InfoBlock({ title, lines }: { title: string; lines: string[] }) {
 
 function LogoBlock() {
   return (
-    <div className="flex min-h-[120px] items-center border-r border-black/10 p-5">
+    <div className="kd-doc-logo-block flex min-h-[120px] items-center border-r border-black/10 p-5">
       <BrandMark />
     </div>
   );
@@ -873,7 +1152,7 @@ function LogoBlock() {
 
 function TotalRow({ label, value, dark = false }: { label: string; value: string; dark?: boolean }) {
   return (
-    <div className={`grid grid-cols-2 border-b border-black/10 font-sans text-[12px] ${dark ? 'bg-black text-[#F2EFE9]' : 'text-black'}`}>
+    <div className={`kd-doc-total-row grid grid-cols-2 border-b border-black/10 font-sans text-[12px] ${dark ? 'bg-black text-[#F2EFE9]' : 'text-black'}`}>
       <div className="px-4 py-3 font-black uppercase tracking-[0.1em]">{label}</div>
       <div className="px-4 py-3 text-right font-bold">{value}</div>
     </div>
@@ -882,7 +1161,7 @@ function TotalRow({ label, value, dark = false }: { label: string; value: string
 
 function BulletList({ items }: { items: string[] }) {
   return (
-    <ul className="space-y-1">
+    <ul className="kd-doc-bullets flex flex-col gap-1">
       {items.map((item) => (
         <li key={item}>- {item}</li>
       ))}
@@ -892,17 +1171,17 @@ function BulletList({ items }: { items: string[] }) {
 
 function SignatureRow({ left, right }: { left: string; right: string }) {
   return (
-    <div className="grid grid-cols-2 border-b border-black/20">
+    <div className="kd-doc-signature grid grid-cols-2 border-b border-black/20">
       <div className="p-5">
         <p className="font-sans text-[11px] font-black uppercase tracking-[0.1em]">{left}</p>
-        <div className="mt-12 border-t border-black/35 pt-2 font-sans text-[11px] text-black/60">Name, date and signature</div>
+        <div className="kd-doc-signature-line mt-12 border-t border-black/35 pt-2 font-sans text-[11px] text-black/60">Name, date and signature</div>
       </div>
       <div className="border-l border-black/10 p-5">
         <p className="font-sans text-[11px] font-black uppercase tracking-[0.1em]">{right}</p>
-        <div className="mt-5 flex h-16 items-end">
-          <img src={signatureImage} alt="Kraftt Digital signature" className="h-14 w-auto object-contain" />
+        <div className="kd-doc-signature-image-wrap mt-5 flex h-16 items-end">
+          <img src={signatureImage} alt="Kraftt Digital signature" className="kd-doc-signature-image h-14 w-auto object-contain" />
         </div>
-        <div className="mt-2 border-t border-black/35 pt-2 font-sans text-[11px] text-black/60">Authorized signatory</div>
+        <div className="kd-doc-signature-line mt-2 border-t border-black/35 pt-2 font-sans text-[11px] text-black/60">Authorized signatory</div>
       </div>
     </div>
   );
@@ -911,12 +1190,12 @@ function SignatureRow({ left, right }: { left: string; right: string }) {
 function MetricBand({ title, metrics }: { title: string; metrics: [string, string][] }) {
   return (
     <section className="border-b border-black/20">
-      <h3 className="px-5 pt-5 font-sans text-[13px] font-black uppercase tracking-[-0.02em] text-black">{title}</h3>
-      <div className="mt-3 grid grid-cols-3 border-t border-black/10">
+      <h3 className="kd-doc-metric-title px-5 pt-5 font-sans text-[13px] font-black uppercase tracking-[-0.02em] text-black">{title}</h3>
+      <div className="kd-doc-metric-grid mt-3 grid grid-cols-3 border-t border-black/10">
         {metrics.map(([label, value]) => (
-          <div key={label} className="min-h-[96px] border-r border-black/10 p-5 text-center last:border-r-0">
-            <p className="font-sans text-[11px] font-black uppercase tracking-[0.08em] text-black">{label}</p>
-            <p className="mt-4 font-sans text-[30px] font-black uppercase leading-none tracking-[-0.06em] text-black">{value}</p>
+          <div key={label} className="kd-doc-metric-item min-h-[96px] border-r border-black/10 p-5 text-center last:border-r-0">
+            <p className="kd-doc-metric-label font-sans text-[11px] font-black uppercase tracking-[0.08em] text-black">{label}</p>
+            <p className="kd-doc-metric-value mt-4 font-sans text-[30px] font-black uppercase leading-none tracking-[-0.06em] text-black">{value}</p>
           </div>
         ))}
       </div>
@@ -925,5 +1204,5 @@ function MetricBand({ title, metrics }: { title: string; metrics: [string, strin
 }
 
 function BlackFooter() {
-  return <div className="h-10 bg-black" />;
+  return <div className="kd-doc-footer h-10 bg-black" />;
 }
