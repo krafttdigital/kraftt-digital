@@ -322,7 +322,9 @@ function PricingMatrix({
                   <span className="font-display text-3xl text-[var(--color-linen)]" style={{ fontWeight: 300 }}>
                     {formatted ?? 'India only'}
                   </span>
-                  <span className="pb-1 font-sans text-sm text-[var(--color-dusk)]">{pkg.delivery.toLowerCase().includes('monthly') ? '/ month' : 'fixed'}</span>
+                  {pkg.price.billing === 'one-time' ? (
+                    <span className="pb-1 font-sans text-sm text-[var(--color-dusk)]">fixed</span>
+                  ) : null}
                 </p>
 
                 <Button to={buildContactPrefillPath(category, pkg, currency)} variant={pkg.featured ? 'primary' : 'secondary'} className={`mt-4 w-full gap-3 py-2.5 text-xs ${pkg.featured ? '' : 'border-white/20 bg-transparent text-[var(--color-linen)] hover:border-[var(--color-umber)] hover:text-[var(--color-sand)]'}`}>

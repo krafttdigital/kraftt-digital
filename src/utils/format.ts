@@ -27,7 +27,7 @@ export function formatPrice(p: Price, currency: Currency): string | null {
 
   const isApprox = currency === 'USD' ? p.usdApprox : p.inrApprox;
   const formatted = formatters[currency].format(amount);
-  const suffix = p.billing === 'monthly' ? '/mo' : '';
+  const suffix = p.billing === 'monthly' ? '/month' : p.billing === 'yearly' ? '/year' : '';
   return `${isApprox ? '≈ ' : ''}${formatted}${suffix}`;
 }
 

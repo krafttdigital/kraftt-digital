@@ -59,7 +59,11 @@ export const serviceCategories: ServiceCategory[] = [
           'Custom domain business email (1 ID)',
           'Mobile optimised',
         ],
-        addons: [addon('GEO & AEO optimisation', 79, 4000), addon('JSON-LD schema markup', 49, 2500)],
+        addons: [
+          addon('GEO & AEO optimisation', 79, 4000),
+          addon('JSON-LD schema markup', 49, 2500),
+          addonInrOnly('Kraftt website maintenance', 12000, 'yearly'),
+        ],
         delivery: '3–4 days',
       },
       {
@@ -76,7 +80,11 @@ export const serviceCategories: ServiceCategory[] = [
           'Contact form + basic lead capture',
           'Google Search Console setup',
         ],
-        addons: [addon('GEO & AEO optimisation', 99, 5000), addon('JSON-LD schema markup', 69, 3500)],
+        addons: [
+          addon('GEO & AEO optimisation', 99, 5000),
+          addon('JSON-LD schema markup', 69, 3500),
+          addonInrOnly('Kraftt website maintenance', 12000, 'yearly'),
+        ],
         delivery: '6–8 days',
       },
       {
@@ -94,7 +102,7 @@ export const serviceCategories: ServiceCategory[] = [
           'WhatsApp + CRM integration',
           'Blog section setup',
         ],
-        addons: [addon('Monthly maintenance retainer', 49, 2500, 'monthly')],
+        addons: [addonInrOnly('Kraftt website maintenance', 12000, 'yearly')],
         delivery: '10–14 days',
       },
     ],
@@ -112,6 +120,11 @@ export const serviceCategories: ServiceCategory[] = [
       {
         question: 'Will my website work on mobile phones?',
         answer: 'Yes. Every package on this page is built mobile-first and tested across phone, tablet and desktop breakpoints before launch.',
+      },
+      {
+        question: 'Is website maintenance included after launch?',
+        answer:
+          'One-time website payment covers the build, launch and handover. After that, you maintain the site yourself. If you want Kraftt Digital to maintain the site, handle small content updates, keep the site healthy, and make normal changes for you, maintenance is Rs. 12,000/year for every website package. New features, new sections, advanced integrations, or larger scope additions are priced separately.',
       },
       {
         question: 'Can international clients order a website package?',
@@ -581,7 +594,10 @@ export const serviceCategories: ServiceCategory[] = [
         featured: false,
         price: price(249, 10000),
         includes: ['5 ad creatives (static)', '5 product mockup images', '10 AI-written product descriptions', '3 email drafts'],
-        addons: [addon('Animated ad creatives', 99, 4500)],
+        addons: [
+          addon('Animated ad creatives', 99, 4500),
+          addonInrOnly('Monthly AI creative support ', 10000, 'monthly'),
+        ],
         delivery: '2–3 days',
       },
       {
@@ -598,7 +614,10 @@ export const serviceCategories: ServiceCategory[] = [
           'Landing page copy',
           '5 social post designs',
         ],
-        addons: [addon('Product packaging design', 149, 6000)],
+        addons: [
+          addon('Product packaging design', 149, 6000),
+          addonInrOnly('Monthly AI creative support (half-scope product mockups)', 10000, 'monthly'),
+        ],
         delivery: '5–7 days',
       },
       {
@@ -615,7 +634,7 @@ export const serviceCategories: ServiceCategory[] = [
           '10 social post designs',
           'Product creation concept + mockup',
         ],
-        addons: [],
+        addons: [addonInrOnly('Monthly AI creative support (excludes landing pages; half-scope product mockups)', 10000, 'monthly')],
         delivery: '8–12 days',
       },
     ],
@@ -633,6 +652,11 @@ export const serviceCategories: ServiceCategory[] = [
       {
         question: 'What file formats are delivered?',
         answer: 'Platform-ready formats and sizes for the ad networks and social platforms you specify in the brief.',
+      },
+      {
+        question: 'Is AI-Powered Creative fixed or monthly?',
+        answer:
+          'The listed AI-Powered Creative packages are fixed one-time packages. If ongoing creative support is needed, it is Rs. 10,000/month. Monthly support excludes landing pages, and product mockups are handled at half-scope compared with the fixed package unless scoped separately.',
       },
     ],
     relatedSlugs: ['content-copywriting', 'shopify-development', 'social-media-management'],

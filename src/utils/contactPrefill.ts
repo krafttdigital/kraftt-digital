@@ -13,7 +13,7 @@ export function buildContactPrefillPath(category: ServiceCategory, pkg: ServiceP
 
 export function getPackagePrefill(category: ServiceCategory, pkg: ServicePackage, currency: Currency) {
   const budget = formatPrice(pkg.price, currency) ?? 'Available for Indian clients only';
-  const billing = pkg.price.billing === 'monthly' ? 'monthly' : 'fixed';
+  const billing = pkg.price.billing === 'monthly' ? 'monthly' : pkg.price.billing === 'yearly' ? 'yearly' : 'fixed';
   const inclusions = pkg.includes.slice(0, 4).join(', ');
 
   return {

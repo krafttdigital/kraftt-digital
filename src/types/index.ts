@@ -6,7 +6,7 @@
 // ============================================================================
 
 export type Currency = 'USD' | 'INR';
-export type Billing = 'one-time' | 'monthly';
+export type Billing = 'one-time' | 'monthly' | 'yearly';
 
 /** A single priced line item — a package, or an add-on to one. */
 export interface Price {
