@@ -9,6 +9,9 @@ import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 const Home = lazy(() => import('@/pages/Home'));
 const Services = lazy(() => import('@/pages/Services'));
 const ServiceDetail = lazy(() => import('@/pages/ServiceDetail'));
+const BundleDetail = lazy(() => import('@/pages/BundleDetail'));
+const AuthoritySystem = lazy(() => import('@/pages/AuthoritySystem'));
+const Process = lazy(() => import('@/pages/Process'));
 const Portfolio = lazy(() => import('@/pages/Portfolio'));
 const PortfolioDetail = lazy(() => import('@/pages/PortfolioDetail'));
 const About = lazy(() => import('@/pages/About'));
@@ -39,14 +42,14 @@ const CompoundInterestCalculator = lazy(() => import('@/pages/tools/CompoundInte
 
 function PageLoading() {
   return (
-    <div className="agency-section-dark flex min-h-[70vh] items-center justify-center">
-      <div className="agency-glass-dark flex min-w-[220px] flex-col items-center rounded-[var(--radius-card)] border border-white/10 px-8 py-7 text-center" role="status" aria-live="polite">
+    <div className="flex min-h-[70vh] items-center justify-center bg-[var(--color-parchment)]">
+      <div className="agency-glass-light flex min-w-[220px] flex-col items-center rounded-[var(--radius-card)] px-8 py-7 text-center" role="status" aria-live="polite">
         <div className="relative h-14 w-14">
           <span className="absolute inset-0 rounded-full border border-[var(--color-umber)]/25" />
-          <span className="absolute inset-2 animate-spin rounded-full border-2 border-white/10 border-t-[var(--color-umber)]" />
-          <span className="absolute inset-0 flex items-center justify-center font-display text-lg text-[var(--color-linen)]">K</span>
+          <span className="absolute inset-2 animate-spin rounded-full border-2 border-[var(--color-bone)] border-t-[var(--color-umber)]" />
+          <span className="absolute inset-0 flex items-center justify-center font-display text-lg text-[var(--color-midnight)]">K</span>
         </div>
-        <p className="mt-4 font-sans text-[10px] uppercase tracking-[0.22em] text-[var(--color-sand)]">Loading</p>
+        <p className="mt-4 font-sans text-[10px] uppercase tracking-[0.22em] text-[var(--color-umber)]">Loading</p>
       </div>
     </div>
   );
@@ -80,7 +83,7 @@ function RouteLoader() {
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           />
           <motion.div
-            className="mx-auto mt-3 flex w-fit items-center gap-2 rounded-full border border-white/10 bg-[#030405]/78 px-3 py-1.5 text-[var(--color-sand)] shadow-[0_18px_60px_rgba(0,0,0,0.34)] backdrop-blur-md"
+            className="mx-auto mt-3 flex w-fit items-center gap-2 rounded-full border border-[var(--color-bone)] bg-[var(--color-white-paper)]/88 px-3 py-1.5 text-[var(--color-umber)] shadow-[0_18px_60px_rgba(13,13,13,0.12)] backdrop-blur-md"
             initial={{ y: -8, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -8, opacity: 0 }}
@@ -115,7 +118,10 @@ export default function App() {
               <Route element={<Layout />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/services" element={<Services />} />
+                <Route path="/services/bundles/:slug" element={<BundleDetail />} />
                 <Route path="/services/:slug" element={<ServiceDetail />} />
+                <Route path="/authority-system" element={<AuthoritySystem />} />
+                <Route path="/process" element={<Process />} />
                 <Route path="/portfolio" element={<Portfolio />} />
                 <Route path="/portfolio/:slug" element={<PortfolioDetail />} />
                 <Route path="/about" element={<About />} />

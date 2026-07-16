@@ -27,7 +27,7 @@ export function ResetButton({ onClick }: { onClick: () => void }) {
     <button
       type="button"
       onClick={onClick}
-      className="agency-magnetic rounded-[var(--radius-button)] border border-white/15 px-4 py-2 font-sans text-xs font-medium tracking-wide text-[var(--color-dusk)] transition-colors hover:border-[var(--color-umber)] hover:text-[var(--color-sand)]"
+      className="agency-magnetic rounded-[var(--radius-button)] border border-[var(--color-border-light)] bg-[var(--color-parchment)] px-4 py-2 font-sans text-xs font-medium tracking-wide text-[var(--color-text-secondary)] transition-colors hover:border-[var(--color-umber)] hover:text-[var(--color-umber)]"
     >
       Reset
     </button>

@@ -1,290 +1,581 @@
+import { Link } from 'react-router-dom';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowUpRight } from 'lucide-react';
+import {
+  ArrowUpRight,
+  BadgeCheck,
+  CheckCircle2,
+  ClipboardCheck,
+  Layers3,
+  MessageCircle,
+  MousePointerClick,
+  Search,
+  ShieldCheck,
+  Sparkles,
+} from 'lucide-react';
 import { SEO } from '@/components/seo/SEO';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { buildOrganizationSchema, buildWebsiteSchema } from '@/components/seo/schemaBuilders';
+import { buildFaqSchema, buildOrganizationSchema, buildWebsiteSchema } from '@/components/seo/schemaBuilders';
 import { Reveal } from '@/components/motion/Reveal';
-import { SectionHeading } from '@/components/ui/SectionHeading';
-import { ServiceCard } from '@/components/ui/ServiceCard';
-import { PricingCard } from '@/components/ui/PricingCard';
-import { ProcessTimeline } from '@/components/ui/ProcessTimeline';
 import { FAQAccordion } from '@/components/ui/FAQAccordion';
-import { CTASection } from '@/components/ui/CTASection';
-import { Marquee } from '@/components/ui/Marquee';
-import { Button } from '@/components/ui/Button';
-import { PremiumHeroScene } from '@/components/ui/PremiumHeroScene';
-import { StudioShowcase } from '@/components/ui/StudioShowcase';
+// import { LightHeroScene } from '@/components/ui/LightHeroScene';
 import { useCurrency } from '@/context/CurrencyContext';
-import { formatPrice } from '@/utils/format';
-import { serviceCategories } from '@/data/services';
-import { homeFaqs } from '@/data/faqs';
 import { siteConfig } from '@/config/siteConfig';
+import { serviceCategories } from '@/data/services';
+import { portfolioProjects } from '@/data/portfolio';
+import { formatPrice } from '@/utils/format';
+import { trackEvent } from '@/utils/analytics';
+import { DynamicIcon } from '@/utils/icons';
+import heroBackgroundVideo from '../../assets/background.mp4';
+import founderImage from '../../assets/founder.PNG';
 
-const homeProcess = [
-  { title: 'Brief', description: 'A short call to understand the business, the goal, and which service categories actually apply.' },
-  { title: 'Scope & price', description: 'A clear proposal mapped to a package or bundle — exact inclusions, exact price, exact delivery window.' },
-  { title: 'Design & build', description: 'Work happens in visible stages, with a working link or draft shared before anything is finished in isolation.' },
-  { title: 'Launch', description: 'Final QA, domain or platform connection, and handover — with documentation for anything you need to manage yourself.' },
-  { title: 'Grow', description: 'For ongoing services — SEO, social, retainers — work continues monthly with reporting, not a one-off handoff.' },
+const homeDescription =
+  'Kraftt Digital builds websites, search visibility and enquiry systems for established owner-led businesses whose real-world reputation has outgrown their digital presence.';
+
+const auditWhatsAppMessage = `Hi Kraftt Digital, I would like to discuss a Digital Authority Audit for my business.
+
+Business name:
+City:
+Website or Instagram:
+Main goal:`;
+
+const whatsappAuditHref = `https://wa.me/91${siteConfig.contact.whatsapp}?text=${encodeURIComponent(auditWhatsAppMessage)}`;
+
+const trustItems = [
+  {
+    title: 'Founder-led',
+    body: 'Direct accountability from the person scoping and guiding the work.',
+    icon: ShieldCheck,
+  },
+  {
+    title: 'Clear project scope',
+    body: 'Written deliverables, timelines and exclusions before kickoff.',
+    icon: ClipboardCheck,
+  },
+  {
+    title: 'Client-owned assets',
+    body: 'Agreed accounts, files and handover stay with your business.',
+    icon: BadgeCheck,
+  },
+  {
+    title: 'Bathinda to India',
+    body: 'Based in Bathinda, working with owner-led businesses across India.',
+    icon: CheckCircle2,
+  },
 ];
 
-const marqueeMessages = [
-  'Websites that load fast.',
-  'Stores that take orders.',
-  'Brands that hold together.',
-  'Priced in INR or USD.',
-  'No fake statistics. No filler.',
+const problemCards = [
+  {
+    title: 'People trust you offline',
+    body: 'But when they search online, the website, social proof or service information may not show the same standard.',
+  },
+  {
+    title: 'Your offer is scattered',
+    body: 'Good work is hidden behind unclear pages, generic copy and weak proof points.',
+  },
+  {
+    title: 'Enquiries leak',
+    body: 'Visitors are interested, but WhatsApp, forms, tracking and next steps are not connected cleanly.',
+  },
 ];
+
+const transformationCards = [
+  {
+    title: 'Clear positioning',
+    body: 'Visitors understand who you serve, what you offer and why the business is credible.',
+    icon: ClipboardCheck,
+  },
+  {
+    title: 'Findable structure',
+    body: 'Pages, metadata, schema and content foundations make the business easier to understand in search.',
+    icon: Search,
+  },
+  {
+    title: 'Direct enquiry path',
+    body: 'WhatsApp, forms and calls to action guide serious visitors toward a useful conversation.',
+    icon: MousePointerClick,
+  },
+];
+
+const authorityPreview = [
+  'Brand clarity',
+  'Website and search',
+  'Enquiry and WhatsApp flow',
+  'Tracking and ownership',
+];
+
+const processSteps = ['Audit', 'Proposal', 'Kickoff', 'Design & Build', 'Review', 'Launch'];
+
+const whyKraftt = [
+  'No fake guarantees, invented numbers or vanity proof.',
+  'Transparent scope, timeline, deliverables and payment milestones before kickoff.',
+  'Built for owner-led businesses that care how they are seen online.',
+  'Digital work explained in business language before technical implementation.',
+];
+
+const homeFaqs = [
+  {
+    question: 'What is a Digital Authority Audit?',
+    answer:
+      'It is a first review of your current website, search presence, trust signals and enquiry path. The goal is to show what is missing, what should be improved first and which Kraftt Digital service fits the work.',
+  },
+  {
+    question: 'Is this only for businesses without a website?',
+    answer:
+      'No. It is often more useful for established businesses that already have reputation, customers and offline credibility, but whose website, Google presence or enquiry flow does not represent that standard.',
+  },
+  {
+    question: 'Do you guarantee leads or revenue?',
+    answer:
+      'No. We do not sell guaranteed outcomes or fake proof. We build the digital system that improves credibility, visibility and enquiry handling, then measure what can be measured honestly.',
+  },
+  {
+    question: 'Can Kraftt Digital maintain the website after launch?',
+    answer:
+      'Yes. Website maintenance can be handled monthly or yearly depending on the package and scope. New features or major additions are quoted separately before work begins.',
+  },
+  {
+    question: 'Can I start with a normal service instead of the full system?',
+    answer:
+      'Yes. The Services & Pricing page lists focused packages. The audit simply helps you choose the right path when you are unsure where the digital gaps are.',
+  },
+];
+
+const selectedProjects = portfolioProjects.slice(0, 3);
+// Set this to true when the founder section should be visible again.
+const showFounderSection = false;
 
 export default function Home() {
-  const { currency } = useCurrency();
   const shouldReduceMotion = useReducedMotion();
-  const entryPrice = serviceCategories[0].packages[0].price;
-  const formattedEntry = formatPrice(entryPrice, currency);
-
-  // A representative spread of packages for the pricing preview — one
-  // entry-level package from four different categories, not four tiers
-  // of the same thing.
-  const previewPackages = [
-    serviceCategories.find((c) => c.id === 'web')!.packages[1],
-    // serviceCategories.find((c) => c.id === 'shopify')!.packages[0],
-    serviceCategories.find((c) => c.id === 'social')!.packages[0],
-    serviceCategories.find((c) => c.id === 'brand')!.packages[1],
-  ];
+  const { currency } = useCurrency();
+  const servicePreview = serviceCategories.slice(0, 8);
 
   return (
     <>
-      <SEO
-        title={`${siteConfig.name} — Websites, Shopify Stores & Brand Identity`}
-        description={siteConfig.description}
-        path="/"
-      />
-      <JsonLd data={[buildOrganizationSchema(), buildWebsiteSchema()]} />
+      <SEO title="Kraftt Digital | Digital Presence for Serious Brands" description={homeDescription} path="/" />
+      <JsonLd data={[buildOrganizationSchema(), buildWebsiteSchema(), buildFaqSchema(homeFaqs)]} />
 
-      {/* ---------------- HERO ---------------- */}
-      <section className="agency-star-panel relative overflow-hidden pt-[128px] pb-14 md:pt-[160px] md:pb-20 lg:min-h-[720px]">
-        <PremiumHeroScene />
-        <div className="container-kd relative z-10">
+      <section className="kd-home-hero-bg relative overflow-hidden pt-[92px] pb-8 text-[var(--color-midnight)] md:pt-[108px] md:pb-10">
+        <div className="kd-hero-media" aria-hidden="true">
+          <video
+            className="kd-hero-video"
+            autoPlay={!shouldReduceMotion}
+            muted
+            loop
+            playsInline
+            preload="auto"
+            tabIndex={-1}
+            aria-hidden="true"
+            disablePictureInPicture
+            controlsList="nodownload nofullscreen noplaybackrate"
+          >
+            <source src={heroBackgroundVideo} type="video/mp4" />
+          </video>
+          <div className="kd-hero-video-overlay" />
+          <div className="kd-hero-watermark-mask" />
+        </div>
+        <div className="kd-hero-frame" aria-hidden="true" />
+        <div className="kd-hero-ring kd-hero-ring-primary" aria-hidden="true" />
+        <div className="kd-hero-ring kd-hero-ring-secondary" aria-hidden="true" />
+        <div className="kd-hero-thread kd-hero-thread-left" aria-hidden="true" />
+        <div className="kd-hero-thread kd-hero-thread-right" aria-hidden="true" />
+        {/* <LightHeroScene /> */}
+        <div className="container-kd relative z-10 grid gap-6 py-7 md:py-8 lg:grid-cols-[minmax(0,1.02fr)_minmax(360px,0.8fr)] lg:items-center">
           <motion.div
             initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-3xl"
+            className="max-w-4xl"
           >
-            <div className="mb-6 flex flex-wrap gap-2">
-              {['Websites', 'Shopify', 'Brand systems', 'Growth'].map((item, index) => (
-                <motion.span
-                  key={item}
-                  initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.45, delay: 0.1 + index * 0.06, ease: [0.22, 1, 0.36, 1] }}
-                  className="rounded-[6px] border border-white/10 bg-white/[0.06] px-3 py-1.5 font-sans text-xs text-[var(--color-linen)] backdrop-blur"
-                >
-                  {item}
-                </motion.span>
-              ))}
-            </div>
-            <p className="eyebrow mb-6 text-[var(--color-sand)]">Premium digital agency - India &amp; worldwide</p>
-            <h1 className="text-balance font-display text-[42px] leading-[1.02] text-[var(--color-linen)] sm:text-[56px] md:text-[72px]" style={{ fontWeight: 300 }}>
-              Digital systems that look sharp, load fast, and turn attention into <em>action</em>.
-            </h1>
-            <p className="mt-7 max-w-2xl font-sans text-base leading-relaxed text-[var(--color-dusk)] md:text-lg">
-              Kraftt Digital designs and builds websites, Shopify stores and brand identities for founders and growing
-              businesses - in India and worldwide, billed in INR or USD, with exact pricing on every package.
+            <p className="max-w-xl font-sans text-sm font-medium leading-relaxed text-[var(--color-umber)]">
+              {siteConfig.tagline}
             </p>
-            <div className="mt-9 flex flex-col sm:flex-row gap-3">
-              <Button to="/contact" variant="primary">
-                Start a project <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
-              </Button>
-              <Button to="/services" variant="secondary" className="border-white/20 text-[var(--color-linen)] hover:border-[var(--color-umber)] hover:text-[var(--color-umber)]">
-                See pricing
-              </Button>
+            <h1 className="mt-5 max-w-5xl text-balance font-display text-[44px] leading-[0.96] text-[var(--color-midnight)] sm:text-[58px] md:text-[68px] xl:text-[72px]" style={{ fontWeight: 300 }}>
+              Your offline reputation, finally visible online.
+            </h1>
+            <p className="mt-5 max-w-2xl font-sans text-base leading-relaxed text-[var(--color-text-secondary)] md:text-lg">
+              Kraftt Digital builds websites, search visibility and enquiry systems for established owner-led businesses whose real-world reputation has outgrown their digital presence.
+            </p>
+
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <Link
+                to="/contact"
+                onClick={() => trackEvent('hero_audit_click', { location: 'home_hero' })}
+                className="agency-magnetic inline-flex items-center justify-center gap-2 rounded-[var(--radius-button)] bg-[var(--color-midnight)] px-5 py-3 font-sans text-sm font-medium tracking-wide text-[var(--color-parchment)] shadow-[0_18px_44px_rgba(13,13,13,0.16)] hover:bg-[var(--color-umber)]"
+              >
+                Request a Digital Authority Audit
+                <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+              <Link
+                to="/services"
+                className="agency-magnetic inline-flex items-center justify-center gap-2 rounded-[var(--radius-button)] border border-[var(--color-border-light)] bg-[var(--color-bg-secondary)] px-5 py-3 font-sans text-sm font-medium tracking-wide text-[var(--color-midnight)] hover:border-[var(--color-umber)] hover:text-[var(--color-umber)]"
+              >
+                Explore Services & Pricing
+                <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+              <Link to="/portfolio" className="inline-flex items-center justify-center gap-2 px-1 py-3 font-sans text-sm font-medium text-[var(--color-umber)] hover:text-[var(--color-midnight)]">
+                See Selected Work
+                <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
             </div>
-            <div className="mt-10 grid w-full max-w-xl min-w-0 grid-cols-3 overflow-hidden rounded-[var(--radius-card)] border border-white/10 bg-white/[0.04] backdrop-blur">
-              {[
-                ['24', 'fixed packages'],
-                ['8', 'connected services'],
-                ['2', 'currencies'],
-              ].map(([value, label]) => (
-                <div key={label} className="min-w-0 border-r border-white/10 px-3 py-4 last:border-r-0 sm:px-4">
-                  <span className="block font-display text-3xl text-[var(--color-linen)]" style={{ fontWeight: 300 }}>
-                    {value}
-                  </span>
-                  <span className="mt-1 block break-words font-sans text-[8px] uppercase leading-tight tracking-[0.1em] text-[var(--color-dusk)] sm:text-[11px] sm:tracking-[0.16em]">{label}</span>
-                </div>
-              ))}
-            </div>
-            {formattedEntry && (
-              <p className="mt-6 font-sans text-xs text-[var(--color-dusk)]">
-                Websites start from <span className="text-[var(--color-linen)] font-medium">{formattedEntry}</span>. Switch currency in the navigation.
-              </p>
-            )}
           </motion.div>
-        </div>
-      </section>
 
-      <Marquee items={marqueeMessages} />
-
-      {/* ---------------- SELECTED SERVICES ---------------- */}
-      <section className=" py-20 md:py-28">
-        <div className="container-kd">
-          <Reveal>
-            <SectionHeading
-              eyebrow="What we build"
-              title="Eight service categories. One team that ties them together."
-              description="Each one is priced exactly, in INR and USD, with the deliverables listed up front — not summarised behind a 'contact us for pricing' form."
-              light
-            />
-          </Reveal>
-          <div className="mt-10">
-            {serviceCategories.map((cat, index) => (
-              <Reveal key={cat.id} delay={index * 0.04}>
-                <ServiceCard category={cat} index={index} />
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ---------------- PHILOSOPHY ---------------- */}
-      <section className="agency-section-light py-20 md:py-28">
-        <div className="container-kd grid md:grid-cols-2 gap-12 md:gap-20">
-          <Reveal>
-            <SectionHeading
-              eyebrow="How we work"
-              title="Strategy, design and development run as one process — not three handoffs."
-            />
-          </Reveal>
           <Reveal delay={0.08}>
-            <div className="space-y-6 font-sans text-[15px] text-[var(--color-midnight)]/75 leading-relaxed">
-              <p>
-                Most agencies separate strategy, design and build into different teams, with a brief passed down the
-                chain and detail lost at every handoff. We keep the same people across discovery, design and
-                development for a project, so the reasoning behind a decision survives all the way to launch.
-              </p>
-              <p>
-                AI tools are used deliberately — to speed up production on ad creatives, mockups and first-draft
-                copy — but every output is reviewed and finished by our team before it reaches you. Speed comes from
-                process, not from skipping the review.
-              </p>
-              <p>
-                This is best suited to founders and growing businesses who want clear scope and a fixed price before
-                work starts, rather than an open-ended retainer with no defined deliverables.
-              </p>
+            <div className="justify-self-end rounded-[var(--radius-card)] border border-[var(--color-border-light)] bg-[var(--color-bg-secondary)] p-4 shadow-[0_28px_90px_rgba(13,13,13,0.08)] md:max-w-[560px] md:p-5">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="eyebrow">Digital Authority Snapshot</p>
+                  <h2 className="mt-3 font-display text-[32px] leading-[1.05] text-[var(--color-midnight)] md:text-[38px]" style={{ fontWeight: 300 }}>
+                    Your digital authority, connected.
+                  </h2>
+                </div>
+                <Sparkles className="h-5 w-5 text-[var(--color-umber)]" aria-hidden="true" />
+              </div>
+
+              <div className="mt-5 grid gap-2.5">
+                {authorityPreview.map((item, index) => (
+                  <div key={item} className="grid grid-cols-[auto_1fr] items-center gap-3 rounded-[8px] border border-[var(--color-border-light)] bg-[var(--color-parchment)] p-2.5">
+                    <span className={`flex h-9 w-9 items-center justify-center rounded-[7px] ${index === 1 ? 'bg-[var(--color-midnight)] text-[var(--color-sand)]' : 'bg-[var(--color-bg-secondary)] text-[var(--color-umber)]'}`}>
+                      <BadgeCheck className="h-4 w-4" aria-hidden="true" />
+                    </span>
+                    <span className="font-sans text-sm font-medium text-[var(--color-text-secondary)]">{item}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-5 rounded-[var(--radius-card)] bg-[var(--color-surface-dark)] p-4 text-[var(--color-text-on-dark)]">
+                <p className="font-sans text-[10px] uppercase tracking-[0.18em] text-[var(--color-sand)]">Audit output</p>
+                <p className="mt-3 font-sans text-sm leading-relaxed text-[var(--color-text-secondary-on-dark)]">
+                  A practical scope showing what to fix first, what can wait and which service path fits the business.
+                </p>
+              </div>
             </div>
           </Reveal>
-        </div>
-      </section>
 
-      {/* ---------------- STUDIO OUTPUT ---------------- */}
-      <section className=" py-20 md:py-28">
-        <div className="container-kd">
-          <Reveal>
-            <SectionHeading
-              eyebrow="Studio output"
-              title="The systems clients hire us to ship."
-              description="No invented case studies, no placeholder logos. These previews show the actual service combinations Kraftt Digital builds across launch, commerce, creative and growth work."
-              light
-              align="center"
-            />
-          </Reveal>
-          <div className="mt-10">
-            <StudioShowcase />
+          <div className="grid gap-3 sm:grid-cols-2 lg:col-span-2 lg:grid-cols-4">
+            {trustItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <div key={item.title} className="group flex items-start gap-3 rounded-[var(--radius-card)] border border-[var(--color-border-light)] bg-[var(--color-bg-secondary)]/82 p-3 text-left shadow-[0_14px_40px_rgba(13,13,13,0.045)] backdrop-blur transition-colors hover:border-[var(--color-umber)]">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[var(--color-border-light)] bg-[var(--color-parchment)] text-[var(--color-umber)] transition-colors group-hover:bg-[var(--color-midnight)] group-hover:text-[var(--color-sand)]">
+                    <Icon className="h-4 w-4" aria-hidden="true" />
+                  </span>
+                  <span>
+                    <span className="block font-sans text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--color-midnight)]">{item.title}</span>
+                    <span className="mt-0.5 block font-sans text-[11px] leading-relaxed text-[var(--color-text-secondary)]">{item.body}</span>
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* ---------------- PROCESS ---------------- */}
-      <section className="agency-section-light py-20 md:py-28">
-        <div className="container-kd grid md:grid-cols-[1fr_1.4fr] gap-12 md:gap-20">
+      <section className="bg-[var(--color-parchment)] py-16 md:py-24">
+        <div className="container-kd grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <Reveal>
-            <SectionHeading eyebrow="Process" title="Five stages, the same across every service category." />
+            <p className="eyebrow">The business problem</p>
+            <h2 className="mt-4 max-w-xl text-balance font-display text-[36px] leading-[1.08] md:text-[54px]" style={{ fontWeight: 300 }}>
+              Strong reputation should not look weak online.
+            </h2>
           </Reveal>
-          <ProcessTimeline steps={homeProcess} />
-        </div>
-      </section>
-
-      {/* ---------------- PRICING PREVIEW ---------------- */}
-      <section className="agency-section-dark py-20 md:py-15">
-        <div className="container-kd">
-          <Reveal>
-            <SectionHeading
-              eyebrow="Pricing"
-              title="A sample across four categories — every package is on the Services page."
-              align="center"
-            />
-          </Reveal>
-          <div className="mt-3 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {previewPackages.map((pkg, i) => (
-              <Reveal key={pkg.id} delay={i * 0.05}>
-                <PricingCard pkg={pkg} ctaPath="/contact" />
-              </Reveal>
-            ))}
-          </div>
-          <div className="mt-10 text-center">
-            <Button to="/services" variant="ghost">
-              See every package and bundle deal <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* ---------------- WHY CHOOSE KRAFTT DIGITAL ---------------- */}
-      <section className=" py-20 md:py-28">
-        <div className="container-kd">
-          <Reveal>
-            <SectionHeading
-              eyebrow="Why Kraftt Digital"
-              title="What's actually different — not the usual agency claims."
-              light
-            />
-          </Reveal>
-          <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-white/10 rounded-[var(--radius-card)] overflow-hidden">
-            {[
-              {
-                title: 'Two prices, set upfront',
-                body: 'Every package shows an INR and a USD price before you ever get on a call — not a "request a quote" form.',
-              },
-              {
-                title: 'Exact deliverables, not summaries',
-                body: 'Page counts, product limits, post counts and revision rounds are listed per package, not folded into vague language.',
-              },
-              {
-                title: 'Eight categories, one team',
-                body: 'Web, Shopify, content, brand, dashboards, AI creative, SEO and social are built to combine into a single bundle, not outsourced separately.',
-              },
-              {
-                title: 'Delivery windows, stated',
-                body: 'From 2–3 days for an AI creative pack to 25–35 days for a full internal software suite — every package states its own timeline.',
-              },
-            ].map((item, i) => (
-              <Reveal key={item.title} delay={i * 0.05} className="bg-[var(--color-midnight)] p-7">
-                <h3 className="font-display text-lg text-[var(--color-linen)]" style={{ fontWeight: 400 }}>
+          <div className="grid gap-4 sm:grid-cols-3">
+            {problemCards.map((item, index) => (
+              <Reveal key={item.title} delay={index * 0.05} className="rounded-[var(--radius-card)] border border-[var(--color-border-light)] bg-[var(--color-bg-secondary)] p-5">
+                <p className="font-display text-2xl leading-tight text-[var(--color-midnight)]" style={{ fontWeight: 300 }}>
                   {item.title}
-                </h3>
-                <p className="mt-2.5 font-sans text-sm text-[var(--color-dusk)] leading-relaxed">{item.body}</p>
+                </p>
+                <p className="mt-4 font-sans text-sm leading-relaxed text-[var(--color-text-secondary)]">{item.body}</p>
               </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ---------------- FAQ ---------------- */}
-      <section className="agency-section-light py-20 md:py-28">
-        <div className="container-kd max-w-2xl">
-          <Reveal>
-            <SectionHeading eyebrow="Questions" title="Before you get in touch" />
+      <section className="agency-section-light py-16 md:py-24">
+        <div className="container-kd">
+          <Reveal className="max-w-3xl">
+            <p className="eyebrow">Transformation</p>
+            <h2 className="mt-4 text-balance font-display text-[36px] leading-[1.08] md:text-[54px]" style={{ fontWeight: 300 }}>
+              The work turns credibility into a usable customer path.
+            </h2>
           </Reveal>
-          <div className="mt-8">
-            <FAQAccordion items={homeFaqs} />
+          <div className="mt-10 grid gap-5 md:grid-cols-3">
+            {transformationCards.map((item, index) => {
+              const Icon = item.icon;
+              return (
+                <Reveal key={item.title} delay={index * 0.06} className="rounded-[var(--radius-card)] border border-[var(--color-border-light)] bg-[var(--color-bg-secondary)] p-6">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-[8px] bg-[var(--color-midnight)] text-[var(--color-sand)]">
+                    <Icon className="h-5 w-5" aria-hidden="true" />
+                  </span>
+                  <h3 className="mt-6 font-display text-3xl leading-tight text-[var(--color-midnight)]" style={{ fontWeight: 300 }}>
+                    {item.title}
+                  </h3>
+                  <p className="mt-4 font-sans text-sm leading-relaxed text-[var(--color-text-secondary)]">{item.body}</p>
+                </Reveal>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      <CTASection
-        title={<>Tell us what you're building. We'll tell you exactly what it costs.</>}
-        description="A short brief is all it takes to get a scoped package and a fixed price — no obligation, no generic sales call."
-      />
+      
+
+      <section className="bg-[var(--color-bg-dark)] py-16 text-[var(--color-text-on-dark)] md:py-24">
+        <div className="container-kd grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+          <Reveal>
+            <p className="eyebrow text-[var(--color-sand)]">Authority System preview</p>
+            <h2 className="mt-4 max-w-3xl text-balance font-display text-[36px] leading-[1.08] md:text-[54px]" style={{ fontWeight: 300 }}>
+              When the business needs more than one isolated deliverable.
+            </h2>
+            <p className="mt-5 max-w-2xl font-sans text-sm leading-relaxed text-[var(--color-text-secondary-on-dark)]">
+              The Authority System combines positioning, website, search visibility, enquiry flow and analytics into one practical digital presence.
+            </p>
+            <Link to="/authority-system" className="mt-7 inline-flex items-center gap-2 font-sans text-sm font-medium text-[var(--color-sand)] hover:text-[var(--color-text-on-dark)]">
+              Explore the Authority System <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </Reveal>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {authorityPreview.map((item, index) => (
+              <Reveal key={item} delay={index * 0.05} className="rounded-[8px] border border-[var(--color-border-dark)] bg-[var(--color-surface-dark)] p-5">
+                <Layers3 className="h-4 w-4 text-[var(--color-sand)]" aria-hidden="true" />
+                <p className="mt-4 font-display text-2xl leading-tight text-[var(--color-text-on-dark)]" style={{ fontWeight: 300 }}>
+                  {item}
+                </p>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-[var(--color-parchment)] py-16 md:py-24">
+        <div className="container-kd">
+          <Reveal className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="eyebrow">Selected Work</p>
+              <h2 className="mt-4 text-balance font-display text-[36px] leading-[1.08] text-[var(--color-midnight)] md:text-[54px]" style={{ fontWeight: 300 }}>
+                Real builds, shown without inflated claims.
+              </h2>
+            </div>
+            <Link to="/portfolio" className="agency-magnetic inline-flex w-fit items-center gap-2 rounded-[var(--radius-button)] border border-[var(--color-border-light)] bg-[var(--color-bg-secondary)] px-4 py-3 font-sans text-sm font-medium text-[var(--color-midnight)] hover:border-[var(--color-umber)] hover:text-[var(--color-umber)]">
+              See selected work <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </Reveal>
+          <div className="mt-10 grid gap-5 lg:grid-cols-3">
+            {selectedProjects.map((project, index) => (
+              <Reveal key={project.slug} delay={index * 0.06}>
+                <Link to={`/portfolio/${project.slug}`} className="agency-depth-card group flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] border border-[var(--color-border-light)] bg-[var(--color-bg-secondary)] shadow-[0_22px_70px_rgba(13,13,13,0.08)]">
+                  {project.imageUrl && (
+                    <div className="aspect-[16/10] overflow-hidden bg-[var(--color-midnight)]">
+                      <img src={project.imageUrl} alt={project.heroImageAlt} className="h-full w-full object-cover opacity-90 transition-transform duration-500 group-hover:scale-[1.03]" loading="lazy" />
+                    </div>
+                  )}
+                  <div className="flex flex-1 flex-col p-5">
+                    <p className="font-sans text-[10px] uppercase tracking-[0.18em] text-[var(--color-umber)]">{project.industry}</p>
+                    <h3 className="mt-3 font-display text-3xl leading-tight text-[var(--color-midnight)]" style={{ fontWeight: 300 }}>
+                      {project.client}
+                    </h3>
+                    <p className="mt-4 line-clamp-4 font-sans text-sm leading-relaxed text-[var(--color-text-secondary)]">{project.challenge}</p>
+                    <span className="mt-6 inline-flex items-center gap-2 font-sans text-sm font-medium text-[var(--color-umber)]">
+                      View case study <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                    </span>
+                  </div>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-[var(--color-parchment)] py-16 md:py-24">
+        <div className="container-kd">
+          <Reveal className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="eyebrow">Services preview</p>
+              <h2 className="mt-4 max-w-3xl text-balance font-display text-[36px] leading-[1.08] md:text-[54px]" style={{ fontWeight: 300 }}>
+                Focused services before a larger system is recommended.
+              </h2>
+            </div>
+            <Link to="/services" className="agency-magnetic inline-flex w-fit items-center gap-2 rounded-[var(--radius-button)] bg-[var(--color-midnight)] px-4 py-3 font-sans text-sm font-medium text-[var(--color-parchment)] hover:bg-[var(--color-umber)]">
+              View Services & Pricing <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </Reveal>
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {servicePreview.map((category, index) => {
+              const firstPrice = formatPrice(category.packages[0].price, currency) ?? 'Custom scope';
+              return (
+                <Reveal key={category.id} delay={index * 0.04}>
+                  <Link to={`/services/${category.slug}`} className="agency-depth-card group flex h-full flex-col rounded-[var(--radius-card)] border border-[var(--color-border-light)] bg-[var(--color-bg-secondary)] p-5">
+                    <span className="flex h-11 w-11 items-center justify-center rounded-[8px] bg-[var(--color-midnight)] text-[var(--color-sand)]">
+                      <DynamicIcon name={category.icon} className="h-5 w-5" />
+                    </span>
+                    <h3 className="mt-5 font-display text-2xl leading-tight text-[var(--color-midnight)] group-hover:text-[var(--color-umber)]" style={{ fontWeight: 300 }}>
+                      {category.name}
+                    </h3>
+                    <p className="mt-3 flex-1 font-sans text-sm leading-relaxed text-[var(--color-text-secondary)]">{category.shortSummary}</p>
+                    <p className="mt-5 font-sans text-xs font-medium text-[var(--color-umber)]">Starting from {firstPrice}</p>
+                  </Link>
+                </Reveal>
+              );
+            })}
+          </div>
+        </div>
+      </section>  
+
+      <section className="agency-section-light py-16 md:py-24">
+        <div className="container-kd">
+          <Reveal className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="eyebrow">Process preview</p>
+              <h2 className="mt-4 max-w-3xl text-balance font-display text-[36px] leading-[1.08] md:text-[54px]" style={{ fontWeight: 300 }}>
+                A clear path from audit to launch.
+              </h2>
+            </div>
+            <Link to="/process" className="agency-magnetic inline-flex w-fit items-center gap-2 rounded-[var(--radius-button)] bg-[var(--color-midnight)] px-4 py-3 font-sans text-sm font-medium text-[var(--color-parchment)] hover:bg-[var(--color-umber)]">
+              See the Full Process <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </Reveal>
+          <div className="mt-10 grid gap-3 md:grid-cols-6">
+            {processSteps.map((step, index) => (
+              <Reveal key={step} delay={index * 0.04} className="rounded-[var(--radius-card)] border border-[var(--color-border-light)] bg-[var(--color-bg-secondary)] p-4">
+                <p className="font-sans text-[10px] uppercase tracking-[0.16em] text-[var(--color-umber)]">{String(index + 1).padStart(2, '0')}</p>
+                <h3 className="mt-4 font-display text-2xl leading-tight text-[var(--color-midnight)]" style={{ fontWeight: 300 }}>
+                  {step}
+                </h3>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-[var(--color-bg-dark)] py-16 text-[var(--color-text-on-dark)] md:py-24">
+        <div className="container-kd grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
+          <Reveal>
+            <p className="eyebrow text-[var(--color-sand)]">Why Kraftt</p>
+            <h2 className="mt-4 text-balance font-display text-[36px] leading-[1.08] md:text-[54px]" style={{ fontWeight: 300 }}>
+              Premium because it is clear, not because it is vague.
+            </h2>
+          </Reveal>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {whyKraftt.map((item, index) => (
+              <Reveal key={item} delay={index * 0.05} className="rounded-[8px] border border-[var(--color-border-dark)] bg-[var(--color-surface-dark)] p-5">
+                <ShieldCheck className="h-4 w-4 text-[var(--color-sand)]" aria-hidden="true" />
+                <p className="mt-4 font-sans text-sm leading-relaxed text-[var(--color-text-secondary-on-dark)]">{item}</p>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {showFounderSection && (
+        <section className="agency-section-light py-16 md:py-24">
+          <div className="container-kd grid gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-center">
+            <Reveal className="lg:max-w-[440px]">
+              <div className="relative overflow-hidden rounded-[var(--radius-card)] border border-[var(--color-border-dark)] bg-[var(--color-midnight)] p-2 shadow-[0_26px_88px_rgba(13,13,13,0.18)]">
+                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(197,168,130,0.2),transparent_38%)]" aria-hidden="true" />
+                <div className="relative overflow-hidden rounded-[6px] bg-[var(--color-white-paper)]">
+                  <img
+                    src={founderImage}
+                    alt="Ketan Goyal, founder of Kraftt Digital"
+                    className="aspect-[4/5] w-full object-cover saturate-[0.96] contrast-[1.03]"
+                    style={{ objectPosition: 'center 36%' }}
+                    loading="lazy"
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent_58%,rgba(13,13,13,0.2))]" aria-hidden="true" />
+                </div>
+                <div className="relative mt-2 flex items-center justify-between gap-3 px-1 pb-1">
+                  <span>
+                    <span className="block font-sans text-[10px] uppercase tracking-[0.18em] text-[var(--color-sand)]">Founder-led</span>
+                    <span className="mt-0.5 block font-sans text-xs text-[var(--color-text-secondary-on-dark)]">Ketan Goyal</span>
+                  </span>
+                  <span className="rounded-full border border-[var(--color-border-dark)] px-3 py-1 font-sans text-[10px] uppercase tracking-[0.16em] text-[var(--color-sand)]">Bathinda</span>
+                </div>
+              </div>
+            </Reveal>
+            <Reveal delay={0.06}>
+              <p className="eyebrow">Founder section</p>
+              <h2 className="mt-4 text-balance font-display text-[36px] leading-[1.08] text-[var(--color-midnight)] md:text-[54px]" style={{ fontWeight: 300 }}>
+                Built from Bathinda for businesses that care how they are seen.
+              </h2>
+              <p className="mt-5 font-sans text-[15px] leading-relaxed text-[var(--color-text-secondary)]">
+                Kraftt Digital is led by Ketan Goyal, founder, Bathinda, Punjab. The work is shaped for businesses where offline reputation is strong, but the digital system has often been treated as an afterthought.
+              </p>
+              <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                {[
+                  ['Direct scope', 'No handoff confusion'],
+                  ['Owned assets', 'Accounts stay yours'],
+                  ['Clear launch', 'Handover included'],
+                ].map(([title, body]) => (
+                  <div key={title} className="rounded-[var(--radius-card)] border border-[var(--color-border-light)] bg-[var(--color-bg-secondary)] p-4">
+                    <ShieldCheck className="h-4 w-4 text-[var(--color-umber)]" aria-hidden="true" />
+                    <p className="mt-3 font-sans text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-midnight)]">{title}</p>
+                    <p className="mt-1 font-sans text-xs leading-relaxed text-[var(--color-text-secondary)]">{body}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <a href={`mailto:${siteConfig.contact.email}`} className="agency-magnetic rounded-[var(--radius-button)] border border-[var(--color-border-light)] bg-[var(--color-bg-secondary)] px-4 py-3 font-sans text-sm font-medium text-[var(--color-midnight)] hover:border-[var(--color-umber)] hover:text-[var(--color-umber)]">
+                  {siteConfig.contact.email}
+                </a>
+                {siteConfig.social.linkedin && (
+                  <a href={siteConfig.social.linkedin} target="_blank" rel="noopener noreferrer" className="agency-magnetic inline-flex items-center gap-2 rounded-[var(--radius-button)] bg-[var(--color-midnight)] px-4 py-3 font-sans text-sm font-medium text-[var(--color-parchment)] hover:bg-[var(--color-umber)]">
+                    LinkedIn <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                  </a>
+                )}
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      )}
+
+      <section className="agency-section-light py-16 md:py-24">
+        <div className="container-kd grid gap-8 rounded-[var(--radius-card)] border border-[var(--color-border-light)] bg-[var(--color-bg-secondary)] p-6 md:grid-cols-[1fr_auto] md:items-end md:p-8">
+          <Reveal>
+            <p className="eyebrow">Services and pricing</p>
+            <h2 className="mt-4 max-w-3xl text-balance font-display text-[36px] leading-[1.08] md:text-[54px]" style={{ fontWeight: 300 }}>
+              See every service, package, timeline and starting investment.
+            </h2>
+          </Reveal>
+          <Reveal delay={0.06}>
+            <Link to="/services" className="agency-magnetic inline-flex items-center justify-center gap-2 rounded-[var(--radius-button)] bg-[var(--color-midnight)] px-5 py-3 font-sans text-sm font-medium tracking-wide text-[var(--color-parchment)] hover:bg-[var(--color-umber)]">
+              View Services & Pricing <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="bg-[var(--color-parchment)] py-16 md:py-24">
+        <div className="container-kd grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
+          <Reveal>
+            <p className="eyebrow">FAQs</p>
+            <h2 className="mt-4 text-balance font-display text-[36px] leading-[1.08] text-[var(--color-midnight)] md:text-[54px]" style={{ fontWeight: 300 }}>
+              Before you request an audit
+            </h2>
+          </Reveal>
+          <Reveal delay={0.06} className="rounded-[var(--radius-card)] border border-[var(--color-border-light)] bg-[var(--color-bg-secondary)] p-5 md:p-7">
+            <FAQAccordion items={homeFaqs} />
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="relative overflow-hidden bg-[var(--color-bg-dark)] py-16 text-[var(--color-text-on-dark)] md:py-24">
+        <div className="pointer-events-none absolute inset-0 kd-hero-grid opacity-10" aria-hidden="true" />
+        <div className="container-kd relative z-10 grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
+          <Reveal>
+            <p className="eyebrow text-[var(--color-sand)]">Final CTA</p>
+            <h2 className="mt-4 max-w-3xl text-balance font-display text-[40px] leading-[1.04] md:text-[64px]" style={{ fontWeight: 300 }}>
+              Let your online presence carry the same weight as your real reputation.
+            </h2>
+          </Reveal>
+          <Reveal delay={0.08} className="flex flex-col gap-3 sm:flex-row md:flex-col">
+            <Link to="/contact" onClick={() => trackEvent('final_cta_click', { location: 'home_final' })} className="agency-magnetic inline-flex items-center justify-center gap-2 rounded-[var(--radius-button)] bg-[var(--color-linen)] px-5 py-3 font-sans text-sm font-medium tracking-wide text-[var(--color-midnight)] hover:bg-[var(--color-sand)]">
+              Get My Digital Audit <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+            <a href={whatsappAuditHref} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('whatsapp_click', { location: 'home_final' })} className="agency-magnetic inline-flex items-center justify-center gap-2 rounded-[var(--radius-button)] border border-[var(--color-border-dark)] px-5 py-3 font-sans text-sm font-medium tracking-wide text-[var(--color-text-on-dark)] hover:border-[var(--color-sand)] hover:text-[var(--color-sand)]">
+              Discuss Your Business <MessageCircle className="h-4 w-4" aria-hidden="true" />
+            </a>
+          </Reveal>
+        </div>
+      </section>
     </>
   );
 }

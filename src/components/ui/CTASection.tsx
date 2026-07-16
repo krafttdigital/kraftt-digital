@@ -11,16 +11,18 @@ interface CTASectionProps {
   primaryTo?: string;
   secondaryLabel?: string;
   secondaryTo?: string;
+  secondaryHref?: string;
 }
 
 export function CTASection({
   eyebrow = 'Get started',
   title,
   description,
-  primaryLabel = 'Start a project',
+  primaryLabel = 'Request a Digital Authority Audit',
   primaryTo = '/contact',
-  secondaryLabel = 'See our services',
-  secondaryTo = '/services',
+  secondaryLabel = 'See selected work',
+  secondaryTo = '/portfolio',
+  secondaryHref,
 }: CTASectionProps) {
   return (
     <section className="agency-section-dark agency-connector relative overflow-hidden py-20 md:py-28">
@@ -42,7 +44,8 @@ export function CTASection({
               {primaryLabel} <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
             </Button>
             <Button
-              to={secondaryTo}
+              to={secondaryHref ? undefined : secondaryTo}
+              href={secondaryHref}
               variant="secondary"
               className="border-white/20 text-[var(--color-linen)] hover:border-[var(--color-umber)] hover:text-[var(--color-umber)]"
             >

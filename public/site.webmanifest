@@ -1,7 +1,7 @@
 {
   "name": "Kraftt Digital",
   "short_name": "Kraftt",
-  "description": "Digital presence for brands that take themselves seriously.",
+  "description": "Digital presence for brands that take themselves seriously",
   "icons": [
     { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
   ],

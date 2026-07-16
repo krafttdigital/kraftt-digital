@@ -1,12 +1,16 @@
 import type { NavItem } from '@/types';
 
 export const primaryNav: NavItem[] = [
-  { label: 'Services', href: '/services' },
-  { label: 'Portfolio', href: '/portfolio' },
+  { label: 'Work', href: '/portfolio' },
+  { label: 'Services & Pricing', href: '/services' },
+  { label: 'Authority System', href: '/authority-system' },
+  { label: 'Process', href: '/process' },
   { label: 'About', href: '/about' },
-  { label: 'Blog', href: '/blog' },
+];
+
+export const resourceNav: NavItem[] = [
   { label: 'Tools', href: '/tools' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Insights', href: '/blog' },
 ];
 
 export const footerServiceLinks: NavItem[] = [

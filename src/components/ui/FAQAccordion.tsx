@@ -2,6 +2,7 @@ import { useState, useId } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import type { ServiceFAQ } from '@/types';
+import { trackEvent } from '@/utils/analytics';
 
 export function FAQAccordion({ items, tone = 'light' }: { items: ServiceFAQ[]; tone?: 'light' | 'dark' }) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
@@ -22,7 +23,10 @@ export function FAQAccordion({ items, tone = 'light' }: { items: ServiceFAQ[]; t
                 id={buttonId}
                 aria-expanded={isOpen}
                 aria-controls={panelId}
-                onClick={() => setOpenIndex(isOpen ? null : index)}
+                onClick={() => {
+                  if (!isOpen) trackEvent('faq_open', { question: item.question });
+                  setOpenIndex(isOpen ? null : index);
+                }}
                 className="w-full flex items-center justify-between gap-4 py-5 text-left"
               >
                 <span className={`font-sans text-[15px] ${isDark ? 'text-[var(--color-linen)]' : 'text-[var(--color-midnight)]'}`} style={{ fontWeight: 500 }}>

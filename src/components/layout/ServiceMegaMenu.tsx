@@ -153,7 +153,7 @@ export function ServiceMegaMenu({ open, onClose }: ServiceMegaMenuProps) {
               </div>
 
               <Link
-                to="/contact"
+                to="/services#bundles"
                 onClick={onClose}
                 className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-[var(--radius-button)] border border-white/10 bg-white/[0.06] px-4 py-3 font-sans text-xs font-medium text-[var(--color-linen)] transition-all hover:-translate-y-0.5 hover:border-[var(--color-umber)] hover:text-[var(--color-sand)]"
               >

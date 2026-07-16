@@ -65,10 +65,19 @@ export interface ServiceCategory {
 
 export interface Bundle {
   id: string;
+  slug: string;
   name: string;
+  eyebrow: string;
   description: string;
+  heroSummary: string;
   price: Price;
   includes: string[];
+  bestFor: string[];
+  outcomes: string[];
+  timeline: string;
+  serviceSlugs: string[];
+  process: { title: string; description: string }[];
+  faqs: ServiceFAQ[];
 }
 
 export interface PortfolioProject {

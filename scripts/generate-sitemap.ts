@@ -5,6 +5,7 @@
 import { writeFileSync } from 'fs';
 import { resolve } from 'path';
 import { siteConfig } from '../src/config/siteConfig';
+import { bundles } from '../src/data/bundles';
 import { serviceCategories } from '../src/data/services';
 import { portfolioProjects } from '../src/data/portfolio';
 import { blogPosts } from '../src/data/blog';
@@ -22,6 +23,8 @@ interface SitemapEntry {
 const entries: SitemapEntry[] = [
   { path: '/', changefreq: 'weekly', priority: 1.0 },
   { path: '/services', changefreq: 'weekly', priority: 0.9 },
+  { path: '/authority-system', changefreq: 'monthly', priority: 0.8 },
+  { path: '/process', changefreq: 'monthly', priority: 0.7 },
   { path: '/portfolio', changefreq: 'weekly', priority: 0.7 },
   { path: '/about', changefreq: 'monthly', priority: 0.6 },
   { path: '/contact', changefreq: 'monthly', priority: 0.8 },
@@ -29,6 +32,7 @@ const entries: SitemapEntry[] = [
   { path: '/tools', changefreq: 'weekly', priority: 0.8 },
 
   ...serviceCategories.map((c) => ({ path: `/services/${c.slug}`, changefreq: 'weekly' as const, priority: 0.85 })),
+  ...bundles.map((b) => ({ path: `/services/bundles/${b.slug}`, changefreq: 'monthly' as const, priority: 0.75 })),
   ...portfolioProjects.map((p) => ({ path: `/portfolio/${p.slug}`, changefreq: 'monthly' as const, priority: 0.6 })),
   ...blogPosts.map((p) => ({ path: `/blog/${p.slug}`, changefreq: 'monthly' as const, priority: 0.6, lastmod: p.updatedAt ?? p.publishedAt })),
   ...toolsList.map((t) => ({ path: `/tools/${t.slug}`, changefreq: 'monthly' as const, priority: 0.75 })),

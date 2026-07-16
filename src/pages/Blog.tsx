@@ -1,16 +1,22 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useScroll } from 'framer-motion';
+import { ArrowUpRight, BadgeCheck, BookOpenText, FileText, Search, ShieldCheck, Sparkles } from 'lucide-react';
 import { SEO } from '@/components/seo/SEO';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { buildBreadcrumbSchema } from '@/components/seo/schemaBuilders';
 import { Reveal } from '@/components/motion/Reveal';
 import { BlogCard } from '@/components/ui/BlogCard';
 import { CTASection } from '@/components/ui/CTASection';
-import { PageHero } from '@/components/ui/PageHero';
+import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { VisualEmptyState } from '@/components/ui/VisualEmptyState';
 import { blogPosts, blogCategories } from '@/data/blog';
-import { ArrowUpRight, NotebookPen, Search } from 'lucide-react';
+
+const insightTrust = [
+  { title: 'Written for Indian decisions', body: 'Pricing, GST, search, website and growth topics are framed for real business conversations in India.', icon: BadgeCheck },
+  { title: 'Tools connected', body: 'Articles link to calculators where numbers help the reader move from opinion to estimate.', icon: FileText },
+  { title: 'Search and CRO minded', body: 'Insights are structured to answer questions clearly, build trust and support enquiry paths.', icon: ShieldCheck },
+];
 
 export default function Blog() {
   const [query, setQuery] = useState('');
@@ -39,64 +45,115 @@ export default function Blog() {
         aria-hidden="true"
       />
       <SEO
-        title="Blog"
-        description="Practical, original articles on web design, branding, SEO, e-commerce and business tools — from the Kraftt Digital team."
+        title="Insights"
+        description="India-focused insights on web design, branding, SEO, e-commerce, GST, calculators and digital authority from Kraftt Digital."
         path="/blog"
       />
-      <JsonLd data={buildBreadcrumbSchema([{ name: 'Blog', path: '/blog' }])} />
+      <JsonLd data={buildBreadcrumbSchema([{ name: 'Insights', path: '/blog' }])} />
 
-      <PageHero
-        breadcrumbs={[{ name: 'Blog', path: '/blog' }]}
-        eyebrow="Blog"
-        title={<>Practical writing on web, brand, growth, and business tools.</>}
-        description="Original, useful articles with enough visual structure to scan quickly and enough substance to turn into action."
-        visual="blog"
-        stats={[
-          { value: String(blogPosts.length), label: 'articles' },
-          { value: String(blogCategories.length), label: 'topics' },
-          { value: '0', label: 'fluff' },
-        ]}
-      />
+      <header className="relative overflow-hidden bg-[var(--color-parchment)] pt-[118px] pb-14 text-[var(--color-midnight)] md:pt-[138px] md:pb-20">
+        <div className="pointer-events-none absolute inset-0 kd-hero-grid opacity-20" aria-hidden="true" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-b from-transparent to-[var(--color-bg-secondary)]" aria-hidden="true" />
+
+        <div className="container-kd relative z-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-end">
+          <Reveal>
+            <Breadcrumbs items={[{ name: 'Insights', path: '/blog' }]} />
+            <p className="eyebrow mt-8 text-[var(--color-umber)]">Insights for digital authority</p>
+            <h1 className="mt-5 max-w-4xl text-balance font-display text-[42px] leading-[1.02] md:text-[68px]" style={{ fontWeight: 300 }}>
+              Practical writing for websites, search and Indian business growth.
+            </h1>
+            <p className="mt-6 max-w-2xl font-sans text-base leading-relaxed text-[var(--color-text-secondary)] md:text-lg">
+              Clear articles for founders who want to understand the decision before buying the service: pricing, GST, SEO, Shopify, AEO, calculators and conversion.
+            </p>
+          </Reveal>
+
+          <Reveal delay={0.08}>
+            <aside className="rounded-[var(--radius-card)] border border-[var(--color-border-light)] bg-[var(--color-bg-secondary)] p-5 shadow-[0_28px_90px_rgba(13,13,13,0.1)]">
+              <div className="flex items-center justify-between gap-4">
+                <p className="eyebrow text-[var(--color-umber)]">Editorial library</p>
+                <BookOpenText className="h-5 w-5 text-[var(--color-umber)]" aria-hidden="true" />
+              </div>
+              <div className="mt-5 grid grid-cols-3 gap-px overflow-hidden rounded-[var(--radius-card)] border border-[var(--color-border-light)] bg-[var(--color-border-light)]">
+                {[
+                  [String(blogPosts.length), 'articles'],
+                  [String(blogCategories.length), 'topics'],
+                  ['0', 'fluff'],
+                ].map(([value, label]) => (
+                  <div key={label} className="bg-[var(--color-parchment)] p-4">
+                    <p className="font-display text-3xl leading-none text-[var(--color-midnight)]" style={{ fontWeight: 300 }}>
+                      {value}
+                    </p>
+                    <p className="mt-2 font-sans text-[9px] uppercase tracking-[0.14em] text-[var(--color-text-muted)]">{label}</p>
+                  </div>
+                ))}
+              </div>
+              <Link
+                to="/tools"
+                className="agency-magnetic mt-5 inline-flex w-full items-center justify-center gap-2 rounded-[var(--radius-button)] bg-[var(--color-midnight)] px-4 py-3 font-sans text-sm font-medium text-[var(--color-parchment)] hover:bg-[var(--color-umber)]"
+              >
+                Open calculators
+                <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </aside>
+          </Reveal>
+        </div>
+      </header>
+
+      <section className="agency-section-light py-12 md:py-16">
+        <div className="container-kd grid gap-px overflow-hidden rounded-[var(--radius-card)] border border-[var(--color-border-light)] bg-[var(--color-border-light)] md:grid-cols-3">
+          {insightTrust.map((item, index) => {
+            const Icon = item.icon;
+            return (
+              <Reveal key={item.title} delay={index * 0.05}>
+                <div className="h-full bg-[var(--color-bg-secondary)] p-6">
+                  <Icon className="h-5 w-5 text-[var(--color-umber)]" aria-hidden="true" />
+                  <h2 className="mt-5 font-display text-2xl leading-tight text-[var(--color-midnight)]" style={{ fontWeight: 300 }}>
+                    {item.title}
+                  </h2>
+                  <p className="mt-3 font-sans text-sm leading-relaxed text-[var(--color-text-secondary)]">{item.body}</p>
+                </div>
+              </Reveal>
+            );
+          })}
+        </div>
+      </section>
 
       {featured && (
-        <section className="py-10 md:py-12">
+        <section className="agency-section-light py-10 md:py-14">
           <div className="container-kd">
             <Reveal>
-              <Link to={`/blog/${featured.slug}`} className="agency-glass-dark group grid overflow-hidden rounded-[var(--radius-card)] border border-white/10 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-umber)] hover:shadow-[0_28px_90px_rgba(0,0,0,0.28)] md:grid-cols-[1fr_420px]">
-                <div className="p-5 md:p-7">
-                  <span className="eyebrow">Featured</span>
-                  <h2 className="mt-3 font-display text-3xl text-[var(--color-linen)] transition-colors group-hover:text-[var(--color-sand)] md:text-4xl" style={{ fontWeight: 300 }}>
+              <Link
+                to={`/blog/${featured.slug}`}
+                className="agency-depth-card group grid overflow-hidden rounded-[var(--radius-card)] border border-[var(--color-border-light)] bg-[var(--color-bg-secondary)] shadow-[0_24px_80px_rgba(13,13,13,0.08)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-umber)] md:grid-cols-[minmax(0,1fr)_430px]"
+              >
+                <div className="p-6 md:p-8">
+                  <span className="eyebrow text-[var(--color-umber)]">Featured insight</span>
+                  <h2 className="mt-4 max-w-2xl font-display text-3xl leading-tight text-[var(--color-midnight)] transition-colors group-hover:text-[var(--color-umber)] md:text-5xl" style={{ fontWeight: 300 }}>
                     {featured.title}
                   </h2>
-                  <p className="mt-4 max-w-xl font-sans text-sm leading-relaxed text-[var(--color-dusk)]">{featured.excerpt}</p>
-                  <span className="mt-6 inline-flex items-center gap-2 font-sans text-xs font-medium text-[var(--color-umber)]">
-                    Read featured article <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
+                  <p className="mt-5 max-w-xl font-sans text-sm leading-relaxed text-[var(--color-text-secondary)] md:text-base">{featured.excerpt}</p>
+                  <span className="mt-7 inline-flex items-center gap-2 rounded-[var(--radius-button)] bg-[var(--color-midnight)] px-4 py-3 font-sans text-sm font-medium text-[var(--color-parchment)]">
+                    Read featured article
+                    <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
                   </span>
                 </div>
-                <div className="relative min-h-[260px] overflow-hidden bg-black/30">
+                <div className="relative min-h-[280px] overflow-hidden bg-[var(--color-midnight)]">
                   {featured.imageUrl ? (
                     <img
                       src={featured.imageUrl}
                       alt={featured.imageAlt ?? featured.title}
-                      className="h-full min-h-[260px] w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]"
+                      className="h-full min-h-[280px] w-full object-cover transition-transform duration-700 group-hover:scale-[1.035]"
                     />
                   ) : (
                     <div className="relative h-full p-5">
                       <div className="pointer-events-none absolute inset-0 kd-hero-grid opacity-15" aria-hidden="true" />
-                      <div className="relative rounded-[8px] border border-white/10 bg-white/[0.06] p-5">
-                        <NotebookPen className="h-5 w-5 text-[var(--color-sand)]" aria-hidden="true" />
-                        <div className="mt-8 space-y-3">
-                          <span className="block h-2 rounded-full bg-white/20" />
-                          <span className="block h-2 w-5/6 rounded-full bg-white/12" />
-                          <span className="block h-2 w-2/3 rounded-full bg-white/12" />
-                        </div>
-                      </div>
+                      <BookOpenText className="relative h-8 w-8 text-[var(--color-sand)]" aria-hidden="true" />
                     </div>
                   )}
-                  <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(3,4,5,0.58),transparent_52%),linear-gradient(180deg,transparent_44%,rgba(3,4,5,0.72))]" aria-hidden="true" />
+                  <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent_44%,rgba(13,13,13,0.68))]" aria-hidden="true" />
                   <span className="absolute bottom-5 left-5 inline-flex items-center gap-2 rounded-[7px] border border-white/10 bg-black/45 px-3 py-2 font-sans text-[10px] uppercase tracking-[0.16em] text-[var(--color-sand)] backdrop-blur-xl">
-                    <NotebookPen className="h-3.5 w-3.5" aria-hidden="true" />
-                    Editorial image
+                    <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+                    {featured.category}
                   </span>
                 </div>
               </Link>
@@ -105,13 +162,15 @@ export default function Blog() {
         </section>
       )}
 
-      <div className="agency-section-dark border-y border-white/10">
+      <div className="border-y border-[var(--color-border-light)] bg-[var(--color-bg-secondary)]">
         <div className="container-kd flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex gap-2 overflow-x-auto">
             <button
               onClick={() => setCategory('all')}
               className={`px-4 py-2 rounded-[var(--radius-button)] font-sans text-xs whitespace-nowrap transition-colors ${
-                category === 'all' ? 'bg-[var(--color-umber)] text-[var(--color-midnight)]' : 'bg-white/[0.06] text-[var(--color-dusk)] hover:bg-white/[0.1] hover:text-[var(--color-linen)]'
+                category === 'all'
+                  ? 'bg-[var(--color-midnight)] text-[var(--color-parchment)]'
+                  : 'border border-[var(--color-border-light)] bg-[var(--color-parchment)] text-[var(--color-text-secondary)] hover:border-[var(--color-umber)] hover:text-[var(--color-umber)]'
               }`}
             >
               All
@@ -121,33 +180,35 @@ export default function Blog() {
                 key={c}
                 onClick={() => setCategory(c)}
                 className={`px-4 py-2 rounded-[var(--radius-button)] font-sans text-xs whitespace-nowrap transition-colors ${
-                  category === c ? 'bg-[var(--color-umber)] text-[var(--color-midnight)]' : 'bg-white/[0.06] text-[var(--color-dusk)] hover:bg-white/[0.1] hover:text-[var(--color-linen)]'
+                  category === c
+                    ? 'bg-[var(--color-midnight)] text-[var(--color-parchment)]'
+                    : 'border border-[var(--color-border-light)] bg-[var(--color-parchment)] text-[var(--color-text-secondary)] hover:border-[var(--color-umber)] hover:text-[var(--color-umber)]'
                 }`}
               >
                 {c}
               </button>
             ))}
           </div>
-          <label className="relative w-full sm:w-64">
+          <label className="relative w-full sm:w-72">
             <span className="sr-only">Search articles</span>
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-dusk)]" aria-hidden="true" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-text-muted)]" aria-hidden="true" />
             <input
               type="search"
-              placeholder="Search articles…"
+              placeholder="Search insights..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="agency-focus-field w-full rounded-[var(--radius-button)] border border-white/10 bg-black/30 py-2 pl-9 pr-3 font-sans text-sm text-[var(--color-linen)] placeholder:text-[var(--color-dusk)]/55 focus:border-[var(--color-umber)]"
+              className="agency-focus-field w-full rounded-[var(--radius-button)] border border-[var(--color-border-light)] bg-[var(--color-parchment)] py-2 pl-9 pr-3 font-sans text-sm text-[var(--color-midnight)] placeholder:text-[var(--color-text-muted)]/65 focus:border-[var(--color-umber)]"
             />
           </label>
         </div>
       </div>
 
-      <section className="py-10 md:py-14">
+      <section className="agency-section-light py-12 md:py-16">
         <div className="container-kd">
           {filtered.length === 0 ? (
             <VisualEmptyState
               eyebrow="Search cleared the desk"
-              title="No articles match your search."
+              title="No insights match your search."
               description="Try another topic or clear the filters to see the full editorial library."
               ctaLabel="View all services"
               ctaTo="/services"
@@ -165,7 +226,11 @@ export default function Blog() {
         </div>
       </section>
 
-      <CTASection eyebrow="Want help, not just an article?" title={<>Turn what you just read into a project.</>} />
+      <CTASection
+        eyebrow="Want help, not just an article?"
+        title={<>Turn what you just read into a project.</>}
+        description="Use the article as the thinking layer, then let Kraftt scope the website, SEO, branding or growth work behind it."
+      />
     </>
   );
 }

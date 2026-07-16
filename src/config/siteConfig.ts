@@ -10,13 +10,13 @@
 export const siteConfig = {
   name: 'Kraftt Digital',
   legalName: 'Kraftt Digital', // CONTENT REQUIRED: confirm registered legal entity name if different
-  tagline: 'Digital presence for brands that take themselves seriously.',
+  tagline: 'Digital presence for brands that take themselves seriously',
   domain: 'https://krafttdigital.in',
   defaultLocale: 'en',
   indiaLocale: 'en-IN',
 
   description:
-    'Kraftt Digital builds websites, Shopify stores, brand identities, content, dashboards and growth marketing for businesses in India and worldwide — transparent INR/USD pricing, fast delivery.',
+    'Kraftt Digital turns offline reputation into digital authority through premium websites, search visibility and structured enquiry systems for established Indian businesses.',
 
   logo: {
     wordmark: 'Kraftt',
@@ -59,7 +59,7 @@ export const siteConfig = {
   // the agency, not fetched automatically. To update it, change the
   // single number below; nothing else in the codebase needs to change.
   currency: {
-    default: 'USD' as const,
+    default: 'INR' as const,
     fallbackUsdPerInr: 1 / 83, // i.e. ~₹83 = $1. Update here only.
     storageKey: 'kraftt-currency',
   },

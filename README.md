@@ -46,6 +46,7 @@ Pure white was deliberately rejected as the primary light background in favour o
 /                                  Home
 /services                         Services index (all 8 categories + bundles)
 /services/:slug                   Service detail (8 routes — see src/data/services.ts)
+/services/bundles/:slug           Bundle detail (4 routes — see src/data/bundles.ts)
 /portfolio                        Portfolio index (empty state — see note below)
 /portfolio/:slug                  Case study detail template (ready, unpopulated)
 /about
