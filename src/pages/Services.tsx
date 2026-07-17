@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, BadgeCheck, CheckCircle2, Clock3, FileText, MessageCircle, ShieldCheck, Sparkles } from 'lucide-react';
 import { SEO } from '@/components/seo/SEO';
@@ -107,6 +108,12 @@ function notIncludedFor(categoryId: string) {
 
 export default function Services() {
   const { currency } = useCurrency();
+  const [selectedServiceId, setSelectedServiceId] = useState(serviceCategories[0]?.id ?? '');
+  const selectedCategory = serviceCategories.find((category) => category.id === selectedServiceId) ?? serviceCategories[0]!;
+  const selectedServiceIndex = serviceCategories.findIndex((category) => category.id === selectedCategory.id);
+  const selectedFirstPackage = selectedCategory.packages[0]!;
+  const selectedStartingPrice = packagePriceLabel(selectedCategory, currency);
+  const selectedContactPath = buildContactPrefillPath(selectedCategory, selectedFirstPackage, currency);
 
   return (
     <>
@@ -177,98 +184,185 @@ export default function Services() {
             </Link>
           </Reveal>
 
-          <div className="mt-10 grid gap-5">
-            {serviceCategories.map((category, index) => {
-              const startingPrice = packagePriceLabel(category, currency);
-              const firstPackage = category.packages[0];
-              const contactPath = buildContactPrefillPath(category, firstPackage, currency);
+          <Reveal delay={0.04}>
+            <div className="mt-8 rounded-[var(--radius-card)] border border-[var(--color-border-light)] bg-[var(--color-bg-secondary)] p-3 shadow-[0_18px_60px_rgba(13,13,13,0.06)] md:p-4">
+              <div className="mb-3 flex flex-col gap-1 px-1 md:flex-row md:items-center md:justify-between">
+                <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.16em] text-[var(--color-umber)]">
+                  Choose one service
+                </p>
+                <p className="font-sans text-xs text-[var(--color-text-muted)]">
+                  Tap a service below. Packages and details update in the card.
+                </p>
+              </div>
 
-              return (
-                <Reveal key={category.id} delay={index * 0.04}>
-                  <article className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--color-border-light)] bg-[var(--color-bg-secondary)] shadow-[0_18px_60px_rgba(13,13,13,0.06)]">
-                    <div className="grid gap-0 lg:grid-cols-[minmax(0,0.9fr)_minmax(420px,1.1fr)]">
-                      <div className="border-b border-[var(--color-border-light)] p-5 md:p-6 lg:border-b-0 lg:border-r">
-                        <div className="flex items-start gap-4">
-                          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[8px] bg-[var(--color-midnight)] text-[var(--color-sand)]">
-                            <DynamicIcon name={category.icon} className="h-5 w-5" />
-                          </span>
-                          <div>
-                            <p className="font-sans text-[10px] uppercase tracking-[0.16em] text-[var(--color-umber)]">0{index + 1}</p>
-                            <h3 className="mt-2 font-display text-3xl leading-tight text-[var(--color-midnight)]" style={{ fontWeight: 300 }}>
-                              {category.name}
-                            </h3>
-                            <p className="mt-3 font-sans text-sm leading-relaxed text-[var(--color-text-secondary)]">{category.shortSummary}</p>
-                          </div>
-                        </div>
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 xl:grid-cols-8">
+                {serviceCategories.map((category, index) => {
+                  const isSelected = category.id === selectedCategory.id;
+                  const startingPrice = packagePriceLabel(category, currency);
 
-                        <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                          <InfoBlock label="For" body={category.idealClients[0]} />
-                          <InfoBlock label="Solves" body={category.problemsSolved[0]} />
-                          <InfoBlock label="Timeline" body={firstPackage.delivery} />
-                          <InfoBlock label="Starting investment" body={`Starting from ${startingPrice}`} />
-                        </div>
+                  return (
+                    <button
+                      key={category.id}
+                      type="button"
+                      onClick={() => setSelectedServiceId(category.id)}
+                      className={[
+                        'group flex min-h-[116px] flex-col justify-between rounded-[10px] border p-3 text-left transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-umber)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-parchment)]',
+                        isSelected
+                          ? 'border-[var(--color-umber)] bg-[var(--color-midnight)] text-[var(--color-parchment)] shadow-[0_18px_45px_rgba(13,13,13,0.18)]'
+                          : 'border-[var(--color-border-light)] bg-[var(--color-parchment)] text-[var(--color-midnight)] hover:-translate-y-0.5 hover:border-[var(--color-umber)] hover:shadow-[0_14px_35px_rgba(13,13,13,0.08)]',
+                      ].join(' ')}
+                      aria-pressed={isSelected}
+                    >
+                      <span className="flex items-center justify-between gap-2">
+                        <span
+                          className={[
+                            'flex h-9 w-9 items-center justify-center rounded-[8px] transition-colors',
+                            isSelected ? 'bg-[var(--color-umber)] text-[var(--color-midnight)]' : 'bg-[var(--color-midnight)] text-[var(--color-sand)]',
+                          ].join(' ')}
+                        >
+                          <DynamicIcon name={category.icon} className="h-4 w-4" />
+                        </span>
+                        <span className={isSelected ? 'font-sans text-[10px] uppercase tracking-[0.16em] text-[var(--color-sand)]' : 'font-sans text-[10px] uppercase tracking-[0.16em] text-[var(--color-text-muted)]'}>
+                          0{index + 1}
+                        </span>
+                      </span>
+                      <span>
+                        <span className="block font-sans text-[13px] font-semibold leading-snug">{category.name}</span>
+                        <span className={isSelected ? 'mt-2 block font-sans text-[11px] text-[var(--color-text-secondary-on-dark)]' : 'mt-2 block font-sans text-[11px] text-[var(--color-text-muted)]'}>
+                          From {startingPrice}
+                        </span>
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </Reveal>
 
-                        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                          <Link to={`/services/${category.slug}`} className="agency-magnetic inline-flex items-center justify-center gap-2 rounded-[var(--radius-button)] bg-[var(--color-midnight)] px-4 py-3 font-sans text-sm font-medium tracking-wide text-[var(--color-parchment)] hover:bg-[var(--color-umber)]">
-                            View Service Details <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                          </Link>
-                          <Link to={contactPath} className="agency-magnetic inline-flex items-center justify-center gap-2 rounded-[var(--radius-button)] border border-[var(--color-border-light)] px-4 py-3 font-sans text-sm font-medium tracking-wide text-[var(--color-midnight)] hover:border-[var(--color-umber)] hover:text-[var(--color-umber)]">
-                            Discuss This Service <MessageCircle className="h-4 w-4" aria-hidden="true" />
-                          </Link>
-                        </div>
-                      </div>
-
-                      <div className="p-5 md:p-6">
-                        <div className="grid gap-3 md:grid-cols-3">
-                          {category.packages.map((pkg) => (
-                            <div key={pkg.id} className="flex min-h-[220px] flex-col rounded-[8px] border border-[var(--color-border-light)] bg-[var(--color-parchment)] p-4">
-                              <p className="font-display text-2xl leading-tight text-[var(--color-midnight)]" style={{ fontWeight: 300 }}>
-                                {pkg.name}
-                              </p>
-                              <p className="mt-3 font-sans text-[13px] leading-relaxed text-[var(--color-text-secondary)]">{pkg.includes[0]}</p>
-                              <p className="mt-auto pt-5 font-display text-3xl leading-none text-[var(--color-midnight)]" style={{ fontWeight: 300 }}>
-                                {formatPrice(pkg.price, currency) ?? 'India only'}
-                              </p>
-                              <p className="mt-2 flex items-center gap-1.5 font-sans text-[11px] text-[var(--color-text-muted)]">
-                                <Clock3 className="h-3.5 w-3.5 text-[var(--color-umber)]" aria-hidden="true" />
-                                {pkg.delivery}
-                              </p>
-                            </div>
-                          ))}
-                        </div>
-
-                        <div className="mt-5 grid gap-4 md:grid-cols-2">
-                          <div className="rounded-[8px] border border-[var(--color-border-light)] bg-[var(--color-bg-secondary)] p-4">
-                            <p className="font-sans text-[10px] uppercase tracking-[0.16em] text-[var(--color-umber)]">Main deliverables</p>
-                            <ul className="mt-3 space-y-2">
-                              {category.deliverables.slice(0, 4).map((item) => (
-                                <li key={item} className="flex gap-2 font-sans text-[13px] leading-relaxed text-[var(--color-text-secondary)]">
-                                  <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--color-umber)]" aria-hidden="true" />
-                                  {item}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-
-                          <div className="rounded-[8px] border border-[var(--color-border-light)] bg-[var(--color-bg-secondary)] p-4">
-                            <p className="font-sans text-[10px] uppercase tracking-[0.16em] text-[var(--color-umber)]">Not included by default</p>
-                            <ul className="mt-3 space-y-2">
-                              {notIncludedFor(category.id).map((item) => (
-                                <li key={item} className="flex gap-2 font-sans text-[13px] leading-relaxed text-[var(--color-text-secondary)]">
-                                  <FileText className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--color-text-muted)]" aria-hidden="true" />
-                                  {item}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
+          <Reveal key={selectedCategory.id} delay={0.08}>
+            <article className="mt-6 overflow-hidden rounded-[var(--radius-card)] border border-[var(--color-border-light)] bg-[var(--color-bg-secondary)] shadow-[0_18px_60px_rgba(13,13,13,0.06)]">
+              <div className="grid gap-0 lg:grid-cols-[minmax(0,0.86fr)_minmax(460px,1.14fr)]">
+                <div className="border-b border-[var(--color-border-light)] p-5 md:p-6 lg:border-b-0 lg:border-r">
+                  <div className="flex items-start gap-4">
+                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[8px] bg-[var(--color-midnight)] text-[var(--color-sand)]">
+                      <DynamicIcon name={selectedCategory.icon} className="h-5 w-5" />
+                    </span>
+                    <div>
+                      <p className="font-sans text-[10px] uppercase tracking-[0.16em] text-[var(--color-umber)]">
+                        Selected service 0{selectedServiceIndex + 1} of {serviceCategories.length}
+                      </p>
+                      <h3 className="mt-2 font-display text-3xl leading-tight text-[var(--color-midnight)] md:text-[40px]" style={{ fontWeight: 300 }}>
+                        {selectedCategory.name}
+                      </h3>
+                      <p className="mt-3 font-sans text-sm leading-relaxed text-[var(--color-text-secondary)]">{selectedCategory.shortSummary}</p>
                     </div>
-                  </article>
-                </Reveal>
-              );
-            })}
-          </div>
+                  </div>
+
+                  <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                    <InfoBlock label="For" body={selectedCategory.idealClients[0]} />
+                    <InfoBlock label="Solves" body={selectedCategory.problemsSolved[0]} />
+                    <InfoBlock label="Timeline" body={selectedFirstPackage.delivery} />
+                    <InfoBlock label="Starting investment" body={`Starting from ${selectedStartingPrice}`} />
+                  </div>
+
+                  <div className="mt-6 rounded-[8px] border border-[var(--color-border-light)] bg-[var(--color-parchment)] p-4">
+                    <p className="font-sans text-[10px] uppercase tracking-[0.16em] text-[var(--color-umber)]">Good fit when</p>
+                    <ul className="mt-3 space-y-2">
+                      {selectedCategory.problemsSolved.slice(0, 3).map((item) => (
+                        <li key={item} className="flex gap-2 font-sans text-[13px] leading-relaxed text-[var(--color-text-secondary)]">
+                          <BadgeCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--color-umber)]" aria-hidden="true" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                    <Link to={`/services/${selectedCategory.slug}`} className="agency-magnetic inline-flex items-center justify-center gap-2 rounded-[var(--radius-button)] bg-[var(--color-midnight)] px-4 py-3 font-sans text-sm font-medium tracking-wide text-[var(--color-parchment)] hover:bg-[var(--color-umber)]">
+                      View Service Details <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                    </Link>
+                    <Link to={selectedContactPath} className="agency-magnetic inline-flex items-center justify-center gap-2 rounded-[var(--radius-button)] border border-[var(--color-border-light)] px-4 py-3 font-sans text-sm font-medium tracking-wide text-[var(--color-midnight)] hover:border-[var(--color-umber)] hover:text-[var(--color-umber)]">
+                      Discuss This Service <MessageCircle className="h-4 w-4" aria-hidden="true" />
+                    </Link>
+                  </div>
+                </div>
+
+                <div className="p-5 md:p-6">
+                  <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+                    <div>
+                      <p className="font-sans text-[10px] uppercase tracking-[0.16em] text-[var(--color-umber)]">Compare packages</p>
+                      <h4 className="mt-2 font-display text-3xl leading-tight text-[var(--color-midnight)]" style={{ fontWeight: 300 }}>
+                        Pick the scope, then enquire with details pre-filled.
+                      </h4>
+                    </div>
+                    <p className="font-sans text-xs text-[var(--color-text-muted)]">{selectedCategory.packages.length} fixed scopes</p>
+                  </div>
+
+                  <div className="mt-5 grid gap-3 md:grid-cols-3">
+                    {selectedCategory.packages.map((pkg) => (
+                      <div key={pkg.id} className="flex min-h-[252px] flex-col rounded-[8px] border border-[var(--color-border-light)] bg-[var(--color-parchment)] p-4">
+                        <div className="flex items-start justify-between gap-3">
+                          <p className="font-display text-2xl leading-tight text-[var(--color-midnight)]" style={{ fontWeight: 300 }}>
+                            {pkg.name}
+                          </p>
+                          {pkg.featured && (
+                            <span className="rounded-full bg-[var(--color-umber)] px-2.5 py-1 font-sans text-[9px] uppercase tracking-[0.14em] text-[var(--color-midnight)]">
+                              Popular
+                            </span>
+                          )}
+                        </div>
+                        <p className="mt-3 font-sans text-[13px] leading-relaxed text-[var(--color-text-secondary)]">{pkg.includes[0]}</p>
+                        <p className="mt-auto pt-5 font-display text-3xl leading-none text-[var(--color-midnight)]" style={{ fontWeight: 300 }}>
+                          {formatPrice(pkg.price, currency) ?? 'India only'}
+                        </p>
+                        <p className="mt-2 flex items-center gap-1.5 font-sans text-[11px] text-[var(--color-text-muted)]">
+                          <Clock3 className="h-3.5 w-3.5 text-[var(--color-umber)]" aria-hidden="true" />
+                          {pkg.delivery}
+                        </p>
+                        <Link
+                          to={buildContactPrefillPath(selectedCategory, pkg, currency)}
+                          className={[
+                            'agency-magnetic mt-4 inline-flex items-center justify-center gap-2 rounded-[var(--radius-button)] px-3 py-2.5 font-sans text-xs font-medium tracking-wide transition-colors',
+                            pkg.featured
+                              ? 'bg-[var(--color-umber)] text-[var(--color-midnight)] hover:bg-[var(--color-sand)]'
+                              : 'border border-[var(--color-border-light)] text-[var(--color-midnight)] hover:border-[var(--color-umber)] hover:text-[var(--color-umber)]',
+                          ].join(' ')}
+                        >
+                          Select package <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-5 grid gap-4 md:grid-cols-2">
+                    <div className="rounded-[8px] border border-[var(--color-border-light)] bg-[var(--color-bg-secondary)] p-4">
+                      <p className="font-sans text-[10px] uppercase tracking-[0.16em] text-[var(--color-umber)]">Main deliverables</p>
+                      <ul className="mt-3 space-y-2">
+                        {selectedCategory.deliverables.slice(0, 5).map((item) => (
+                          <li key={item} className="flex gap-2 font-sans text-[13px] leading-relaxed text-[var(--color-text-secondary)]">
+                            <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--color-umber)]" aria-hidden="true" />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="rounded-[8px] border border-[var(--color-border-light)] bg-[var(--color-bg-secondary)] p-4">
+                      <p className="font-sans text-[10px] uppercase tracking-[0.16em] text-[var(--color-umber)]">Not included by default</p>
+                      <ul className="mt-3 space-y-2">
+                        {notIncludedFor(selectedCategory.id).map((item) => (
+                          <li key={item} className="flex gap-2 font-sans text-[13px] leading-relaxed text-[var(--color-text-secondary)]">
+                            <FileText className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[var(--color-text-muted)]" aria-hidden="true" />
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </Reveal>
         </div>
       </section>
 
